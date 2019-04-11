@@ -43,6 +43,7 @@ namespace Roslyn.VisualStudio.IntegrationTests
             {
                 VisualStudio.SolutionExplorer.CreateSolution(_solutionName);
                 VisualStudio.SolutionExplorer.AddProject(new ProjectUtils.Project(ProjectName), _projectTemplate, LanguageName);
+                VisualStudio.SolutionExplorer.RestoreNuGetPackages(new ProjectUtils.Project(ProjectName));
 
                 // Winforms and XAML do not open text files on creation
                 // so these editor tasks will not work if that is the project template being used.
@@ -50,7 +51,7 @@ namespace Roslyn.VisualStudio.IntegrationTests
                     _projectTemplate != WellKnownProjectTemplates.WpfApplication &&
                     _projectTemplate != WellKnownProjectTemplates.CSharpNetCoreClassLibrary)
                 {
-                    VisualStudio.Workspace.SetUseSuggestionMode(false);
+                    VisualStudio.Editor.SetUseSuggestionMode(false);
                     ClearEditor();
                 }
             }

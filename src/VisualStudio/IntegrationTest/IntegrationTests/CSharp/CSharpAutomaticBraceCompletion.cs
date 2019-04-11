@@ -201,6 +201,38 @@ class C {
         }
 
         [WpfFact, Trait(Traits.Feature, Traits.Features.AutomaticCompletion)]
+        public void DoubleQuote_FixedInterpolatedVerbatimString()
+        {
+            SetUpEditor(@"
+class C
+{
+    void M()
+    {
+        $$
+    }
+}");
+
+            VisualStudio.Editor.SendKeys("var v = @$\"");
+            VisualStudio.Editor.Verify.CurrentLineText("var v = $@\"$$\"", assertCaretPosition: true);
+
+            // Backspace removes quotes
+            VisualStudio.Editor.SendKeys(VirtualKey.Backspace);
+            VisualStudio.Editor.Verify.CurrentLineText("var v = $@$$", assertCaretPosition: true);
+
+            // Undo puts them back
+            VisualStudio.Editor.Undo();
+            VisualStudio.Editor.Verify.CurrentLineText("var v = $@\"\"$$", assertCaretPosition: true);
+
+            // First, the FixInterpolatedVerbatimString action is undone (@$ reordering)
+            VisualStudio.Editor.Undo();
+            VisualStudio.Editor.Verify.CurrentLineText("var v = @$\"\"$$", assertCaretPosition: true);
+
+            // Then the automatic quote completion is undone
+            VisualStudio.Editor.Undo();
+            VisualStudio.Editor.Verify.CurrentLineText("var v = @$\"$$", assertCaretPosition: true);
+        }
+
+        [WpfFact, Trait(Traits.Feature, Traits.Features.AutomaticCompletion)]
         public void AngleBracket_PossibleGenerics_InsertionAndCompletion()
         {
             SetUpEditor(@"
@@ -327,17 +359,17 @@ class C {
 }");
 
             VisualStudio.Editor.SendKeys("string s = \"{([<'");
-            VisualStudio.Editor.Verify.CurrentLineText("string s = \"{([<'\"$$", assertCaretPosition: true);
+            VisualStudio.Editor.Verify.CurrentLineText("string s = \"{([<'$$\"", assertCaretPosition: true);
 
             VisualStudio.Editor.SendKeys(VirtualKey.End, ';', VirtualKey.Enter);
 
             VisualStudio.Editor.SendKeys("string y = @\"{([<'");
-            VisualStudio.Editor.Verify.CurrentLineText("string y = @\"{([<'\"$$", assertCaretPosition: true);
+            VisualStudio.Editor.Verify.CurrentLineText("string y = @\"{([<'$$\"", assertCaretPosition: true);
 
             VisualStudio.Editor.SendKeys(VirtualKey.End, ';', VirtualKey.Enter);
 
             VisualStudio.Editor.SendKeys("char ch = '{([<\"");
-            VisualStudio.Editor.Verify.CurrentLineText("char ch = '{([<\"'$$", assertCaretPosition: true);
+            VisualStudio.Editor.Verify.CurrentLineText("char ch = '{([<\"$$'", assertCaretPosition: true);
         }
 
         [WpfFact, Trait(Traits.Feature, Traits.Features.AutomaticCompletion)]
@@ -461,7 +493,7 @@ class C
 ");
 
             VisualStudio.Editor.SendKeys("new Li(", VirtualKey.Tab);
-            VisualStudio.Editor.Verify.CurrentLineText("List<int> li = new List<int>($$)", assertCaretPosition: true);
+            VisualStudio.Editor.Verify.CurrentLineText("List<int> li = new List<int>()$$", assertCaretPosition: true);
         }
 
         [WorkItem(823958, "DevDiv")]

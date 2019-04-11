@@ -25,6 +25,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelli
     {
         private readonly IWpfTextView _textView;
         private readonly IContentType _contentType;
+        private readonly IContentType _originalContentType;
         protected readonly IProjectionBufferFactoryService ProjectionBufferFactoryService;
         protected readonly Microsoft.VisualStudio.TextManager.Interop.TextSpan CurrentStatementSpan;
         private readonly IVsTextLines _debuggerTextLines;
@@ -58,6 +59,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelli
             this.ContextBuffer = contextBuffer;
             this.CurrentStatementSpan = currentStatementSpan[0];
             _contentType = contentType;
+            _originalContentType = _textView.TextBuffer.ContentType;
             this.ProjectionBufferFactoryService = componentModel.GetService<IProjectionBufferFactoryService>();
             _bufferGraphFactoryService = componentModel.GetService<IBufferGraphFactoryService>();
             _isImmediateWindow = IsImmediateWindow((IVsUIShell)serviceProvider.GetService(typeof(SVsUIShell)), vsTextView);
@@ -200,6 +202,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelli
             return true;
         }
 
+        internal void SetContentType(bool install)
+        {
+            var contentType = install ? _contentType : _originalContentType;
+            _textView.TextBuffer.ChangeContentType(contentType, null);
+        }
+
         private ITrackingSpan CreateImmediateWindowProjectionMapping(Document document, out ImmediateWindowContext immediateWindowContext)
         {
             var caretLine = _textView.Caret.ContainingTextViewLine.Extent;
@@ -301,7 +309,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.DebuggerIntelli
         {
             // Unsubscribe from events
             _textView.TextBuffer.PostChanged -= TextBuffer_PostChanged;
-            _debuggerTextView.DisconnectFromIntellisenseControllers();
+            _debuggerTextView.Cleanup();
 
             // The buffer graph subscribes to events of its source buffers, we're no longer interested
             _projectionBuffer.DeleteSpans(0, _projectionBuffer.CurrentSnapshot.SpanCount);
