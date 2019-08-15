@@ -6,6 +6,7 @@ Imports Microsoft.CodeAnalysis.Completion
 Imports Microsoft.CodeAnalysis.Editor.CommandHandlers
 Imports Microsoft.VisualStudio.Text.Editor
 Imports Microsoft.VisualStudio.Text.Editor.Commanding.Commands
+Imports Microsoft.VisualStudio.Utilities
 Imports Roslyn.Utilities
 Imports VSCommanding = Microsoft.VisualStudio.Commanding
 
@@ -32,6 +33,9 @@ Namespace Microsoft.CodeAnalysis.Editor.UnitTests.IntelliSense
             MyBase.New(workspaceElement, extraCompletionProviders, excludedTypes, extraExportedTypes, includeFormatCommandHandler, workspaceKind)
 
             Me.CompletionCommandHandler = GetExportedValue(Of CompletionCommandHandler)()
+
+            Dim featureServiceFactory = GetExportedValue(Of IFeatureServiceFactory)()
+            featureServiceFactory.GlobalFeatureService.Disable(PredefinedEditorFeatureNames.AsyncCompletion, EmptyFeatureController.Instance)
         End Sub
 
 #Region "Editor Related Operations"
@@ -186,6 +190,7 @@ Namespace Microsoft.CodeAnalysis.Editor.UnitTests.IntelliSense
                                Optional isHardSelected As Boolean? = Nothing,
                                Optional shouldFormatOnCommit As Boolean? = Nothing,
                                Optional inlineDescription As String = Nothing,
+                               Optional automationText As String = Nothing,
                                Optional projectionsView As ITextView = Nothing) As Task
             ' projectionsView is not used in this implementation.
 
@@ -221,6 +226,9 @@ Namespace Microsoft.CodeAnalysis.Editor.UnitTests.IntelliSense
                     document, Me.CurrentCompletionPresenterSession.SelectedItem)
                 Assert.Equal(description, itemDescription.Text)
             End If
+
+            ' AutomationText property is only supported by Modern Completion
+            Assert.Null(automationText)
         End Function
 
         Public Overrides Function AssertSessionIsNothingOrNoCompletionItemLike(text As String) As Task
@@ -229,6 +237,10 @@ Namespace Microsoft.CodeAnalysis.Editor.UnitTests.IntelliSense
             End If
 
             Return Task.CompletedTask
+        End Function
+
+        Public Overrides Async Function WaitForUIRenderedAsync() As Task
+            Await WaitForAsynchronousOperationsAsync()
         End Function
 
 #End Region

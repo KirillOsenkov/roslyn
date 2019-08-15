@@ -185,10 +185,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem
                                     {
                                         w.OnDocumentOpened(documentId, textContainer, isCurrentContext);
                                     }
+                                    else if (w.CurrentSolution.ContainsAdditionalDocument(documentId))
+                                    {
+                                        w.OnAdditionalDocumentOpened(documentId, textContainer, isCurrentContext);
+                                    }
                                     else
                                     {
-                                        Debug.Assert(w.CurrentSolution.ContainsAdditionalDocument(documentId));
-                                        w.OnAdditionalDocumentOpened(documentId, textContainer, isCurrentContext);
+                                        Debug.Assert(w.CurrentSolution.ContainsAnalyzerConfigDocument(documentId));
+                                        w.OnAnalyzerConfigDocumentOpened(documentId, textContainer, isCurrentContext);
                                     }
                                 }
                             }
@@ -354,10 +358,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem
                             {
                                 w.OnDocumentClosed(documentId, new FileTextLoader(moniker, defaultEncoding: null));
                             }
+                            else if (w.CurrentSolution.ContainsAdditionalDocument(documentId))
+                            {
+                                w.OnAdditionalDocumentClosed(documentId, new FileTextLoader(moniker, defaultEncoding: null));
+                            }
                             else
                             {
-                                Debug.Assert(w.CurrentSolution.ContainsAdditionalDocument(documentId));
-                                w.OnAdditionalDocumentClosed(documentId, new FileTextLoader(moniker, defaultEncoding: null));
+                                Debug.Assert(w.CurrentSolution.ContainsAnalyzerConfigDocument(documentId));
+                                w.OnAnalyzerConfigDocumentClosed(documentId, new FileTextLoader(moniker, defaultEncoding: null));
                             }
                         }
                     }

@@ -930,7 +930,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // only one substitution happens per lowering, but we need to do
             // N substitutions all at once, where N is the number of lowerings.
 
-            var builder = ArrayBuilder<TypeWithAnnotations>.GetInstance();
+            var builder = ArrayBuilder<TypeWithAnnotations>.GetInstance(typeArguments.Length);
             foreach (var typeArg in typeArguments)
             {
                 TypeWithAnnotations oldTypeArg;
@@ -938,13 +938,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                 do
                 {
                     oldTypeArg = newTypeArg;
-                    newTypeArg = this.TypeMap.SubstituteType(typeArg);
+                    newTypeArg = this.TypeMap.SubstituteType(oldTypeArg);
                 }
-                while (!TypeSymbol.Equals(oldTypeArg.Type, newTypeArg.Type, TypeCompareKind.ConsiderEverything2));
+                while (!TypeSymbol.Equals(oldTypeArg.Type, newTypeArg.Type, TypeCompareKind.ConsiderEverything));
 
-                // https://github.com/dotnet/roslyn/issues/30069 Is this weaker assert sufficient?
-                //Debug.Assert((object)oldTypeArg == newTypeArg);
-                Debug.Assert(oldTypeArg.Equals(newTypeArg, TypeCompareKind.UnknownNullableModifierMatchesAny));
+                // When type substitution does not change the type, it is expected to return the very same object.
+                // Therefore the loop is terminated when that type (as an object) does not change.
+                Debug.Assert((object)oldTypeArg.Type == newTypeArg.Type);
+
+                // The types are the same, so the last pass performed no substitutions.
+                // Therefore the annotations ought to be the same too.
+                Debug.Assert(oldTypeArg.NullableAnnotation == newTypeArg.NullableAnnotation);
 
                 builder.Add(newTypeArg);
             }
@@ -1289,6 +1293,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitConversion(BoundConversion conversion)
         {
+            // a conversion with a method should have been rewritten, e.g. to an invocation
+            Debug.Assert(_inExpressionLambda || conversion.Conversion.MethodSymbol is null);
+
             Debug.Assert(conversion.ConversionKind != ConversionKind.MethodGroup);
             if (conversion.ConversionKind == ConversionKind.AnonymousFunction)
             {

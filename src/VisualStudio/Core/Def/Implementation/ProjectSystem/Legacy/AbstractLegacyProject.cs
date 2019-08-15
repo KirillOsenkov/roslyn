@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
 using Microsoft.CodeAnalysis.Host;
@@ -30,6 +29,8 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.L
         internal VisualStudioProjectOptionsProcessor VisualStudioProjectOptionsProcessor { get; set; }
         protected IProjectCodeModel ProjectCodeModel { get; set; }
         protected VisualStudioWorkspace Workspace { get; }
+
+        internal VisualStudioProject Test_VisualStudioProject => VisualStudioProject;
 
         /// <summary>
         /// The path to the directory of the project. Read-only, since although you can rename
@@ -108,7 +109,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.L
             // TODO: remove this terrible hack, which is working around shims throwing in not-good ways
             try
             {
-                _externalErrorReporter = new ProjectExternalErrorReporter(VisualStudioProject.Id, externalErrorReportingPrefix, serviceProvider);
+                _externalErrorReporter = new ProjectExternalErrorReporter(VisualStudioProject.Id, externalErrorReportingPrefix, Workspace, componentModel.GetService<ExternalErrorDiagnosticUpdateSource>());
                 _editAndContinueProject = new VsENCRebuildableProjectImpl(Workspace, VisualStudioProject, serviceProvider);
             }
             catch (Exception)
@@ -240,6 +241,15 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation.ProjectSystem.L
             }
 
             VisualStudioProject.OutputFilePath = FileUtilities.NormalizeAbsolutePath(Path.Combine(outputDirectory, targetFileName));
+
+            if (ErrorHandler.Succeeded(storage.GetPropertyValue("TargetRefPath", null, (uint)_PersistStorageType.PST_PROJECT_FILE, out var targetRefPath)) && !string.IsNullOrEmpty(targetRefPath))
+            {
+                VisualStudioProject.OutputRefFilePath = targetRefPath;
+            }
+            else
+            {
+                VisualStudioProject.OutputRefFilePath = null;
+            }
         }
 
         private static Guid GetProjectIDGuid(IVsHierarchy hierarchy)

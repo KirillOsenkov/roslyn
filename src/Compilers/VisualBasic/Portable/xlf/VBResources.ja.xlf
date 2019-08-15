@@ -4,12 +4,17 @@
     <body>
       <trans-unit id="ERR_CommentsAfterLineContinuationNotAvailable1">
         <source>Please use language version {0} or greater to use comments after line continuation character.</source>
-        <target state="new">Please use language version {0} or greater to use comments after line continuation character.</target>
+        <target state="translated">行連結文字の後のコメントを使用するには、言語バージョン {0} 以上をご使用ください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ERR_MultipleAnalyzerConfigsInSameDir">
+        <source>Multiple analyzer config files cannot be in the same directory ('{0}').</source>
+        <target state="translated">複数のアナライザー構成ファイルを同じディレクトリに入れることはできません ('{0}')。</target>
         <note />
       </trans-unit>
       <trans-unit id="FEATURE_CommentsAfterLineContinuation">
         <source>comments after line continuation</source>
-        <target state="new">comments after line continuation</target>
+        <target state="translated">行連結後のコメント</target>
         <note />
       </trans-unit>
       <trans-unit id="FEATURE_UnconstrainedTypeParameterInConditional">
@@ -17,7 +22,7 @@
         <target state="translated">バイナリ条件式での非制約型パラメーター</target>
         <note />
       </trans-unit>
-	  <trans-unit id="IDS_VBCHelp">
+      <trans-unit id="IDS_VBCHelp">
         <source>                  Visual Basic Compiler Options
 
                                   - OUTPUT FILE -
@@ -3230,7 +3235,7 @@
       </trans-unit>
       <trans-unit id="ERR_LineContWithCommentOrNoPrecSpace">
         <source>The line continuation character '_' must be preceded by at least one white space and it must be followed by a comment or the '_' must be the last character on the line.</source>
-        <target state="needs-review-translation">行連結文字 '_' の前には、少なくとも 1 つのスペース文字が必要です。また、行連結文字は行の最後の文字でなければなりません。</target>
+        <target state="translated">行連結文字 ' _ ' の前には少なくとも 1 つの空白を指定する必要があります。その後にコメントを続けるか、' _ ' を行の最後の文字にしなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ERR_BadModuleFile1">

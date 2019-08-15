@@ -26,6 +26,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UseLocalFunction
     {
         private static readonly TypeSyntax s_objectType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.ObjectKeyword));
 
+        [ImportingConstructor]
+        public CSharpUseLocalFunctionCodeFixProvider()
+        {
+        }
+
         public override ImmutableArray<string> FixableDiagnosticIds
             => ImmutableArray.Create(IDEDiagnosticIds.UseLocalFunctionDiagnosticId);
 
@@ -240,7 +245,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UseLocalFunction
 
                 if (parameterNode.Type == null)
                 {
-                    parameterNode = parameterNode.WithType(delegateParameter?.Type.GenerateTypeSyntax() ?? s_objectType);
+                    parameterNode = parameterNode.WithType(delegateParameter?.Type.WithNullability(delegateParameter.NullableAnnotation).GenerateTypeSyntax() ?? s_objectType);
                 }
 
                 if (delegateParameter?.HasExplicitDefaultValue == true)

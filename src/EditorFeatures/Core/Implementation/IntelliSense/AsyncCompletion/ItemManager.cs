@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Completion;
+using Microsoft.CodeAnalysis.Experiments;
+using Microsoft.CodeAnalysis.Internal.Log;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.Text.Shared.Extensions;
@@ -30,6 +32,11 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
 
         private readonly RecentItemsManager _recentItemsManager;
 
+        /// <summary>
+        /// For telemetry.
+        /// </summary>
+        private readonly object _targetTypeCompletionFilterChosenMarker = new object();
+
         internal ItemManager(RecentItemsManager recentItemsManager)
         {
             // Let us make the completion Helper used for non-Roslyn items case-sensitive.
@@ -42,7 +49,26 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             IAsyncCompletionSession session,
             AsyncCompletionSessionInitialDataSnapshot data,
             CancellationToken cancellationToken)
-            => Task.FromResult(data.InitialList.OrderBy(i => i.SortText).ToImmutableArray());
+        {
+            if (session.TextView.Properties.TryGetProperty(CompletionSource.TargetTypeFilterExperimentEnabled, out bool isTargetTypeFilterEnabled) && isTargetTypeFilterEnabled)
+            {
+                AsyncCompletionLogger.LogSessionHasTargetTypeFilterEnabled();
+
+                // This method is called exactly once, so use the opportunity to set a baseline for telemetry.
+                if (data.InitialList.Any(i => i.Filters.Any(f => f.DisplayText == FeaturesResources.Target_type_matches)))
+                {
+                    AsyncCompletionLogger.LogSessionContainsTargetTypeFilter();
+                }
+            }
+
+            if (session.TextView.Properties.TryGetProperty(CompletionSource.TypeImportCompletionEnabled, out bool isTypeImportCompletionEnabled) && isTypeImportCompletionEnabled)
+            {
+                AsyncCompletionLogger.LogSessionWithTypeImportCompletionEnabled();
+            }
+
+
+            return Task.FromResult(data.InitialList.OrderBy(i => i.SortText).ToImmutableArray());
+        }
 
         public Task<FilteredCompletionModel> UpdateCompletionListAsync(
             IAsyncCompletionSession session,
@@ -66,11 +92,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
 
             var filterText = session.ApplicableToSpan.GetText(data.Snapshot);
             var reason = data.Trigger.Reason;
-
-            if (!session.Properties.TryGetProperty(CompletionSource.InitialTriggerKind, out CompletionTriggerKind initialRoslynTriggerKind))
-            {
-                initialRoslynTriggerKind = CompletionTriggerKind.Invoke;
-            }
+            var initialRoslynTriggerKind = Helpers.GetRoslynTriggerKind(data.InitialTrigger);
 
             // Check if the user is typing a number. If so, only proceed if it's a number
             // directly after a <dot>. That's because it is actually reasonable for completion
@@ -95,6 +117,21 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             // We need to filter if a non-empty strict subset of filters are selected
             var selectedFilters = data.SelectedFilters.Where(f => f.IsSelected).Select(f => f.Filter).ToImmutableArray();
             var needToFilter = selectedFilters.Length > 0 && selectedFilters.Length < data.SelectedFilters.Length;
+
+            if (session.TextView.Properties.TryGetProperty(CompletionSource.TargetTypeFilterExperimentEnabled, out bool isExperimentEnabled) && isExperimentEnabled)
+            {
+                // Telemetry: Want to know % of sessions with the "Target type matches" filter where that filter is actually enabled
+                if (needToFilter &&
+                    !session.Properties.ContainsProperty(_targetTypeCompletionFilterChosenMarker) &&
+                    selectedFilters.Any(f => f.DisplayText == FeaturesResources.Target_type_matches))
+                {
+                    AsyncCompletionLogger.LogTargetTypeFilterChosenInSession();
+
+                    // Make sure we only record one enabling of the filter per session
+                    session.Properties.AddProperty(_targetTypeCompletionFilterChosenMarker, _targetTypeCompletionFilterChosenMarker);
+                }
+            }
+
             var filterReason = Helpers.GetFilterReason(data.Trigger);
 
             // If the session was created/maintained out of Roslyn, e.g. in debugger; no properties are set and we should use data.Snapshot.
@@ -152,7 +189,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
                 }
             }
 
-            if (data.Trigger.Reason == CompletionTriggerReason.Backspace &&
+            // DismissIfLastCharacterDeleted should be applied only when started with Insertion, and then Deleted all characters typed.
+            // This confirms with the original VS 2010 behavior.
+            if (initialRoslynTriggerKind == CompletionTriggerKind.Insertion &&
+                data.Trigger.Reason == CompletionTriggerReason.Backspace &&
                 completionRules.DismissIfLastCharacterDeleted &&
                 session.ApplicableToSpan.GetText(data.Snapshot).Length == 0)
             {
@@ -249,9 +289,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             if (bestItem != null)
             {
                 selectedItemIndex = itemsInList.IndexOf(i => Equals(i.FilterResult.CompletionItem, bestItem));
-                if (selectedItemIndex > -1 && bestItem != null && matchingItems.Length == 1 && filterText.Length > 0)
+                var deduplicatedList = matchingItems.Where(r => !r.DisplayText.StartsWith("★"));
+                if (selectedItemIndex > -1 &&
+                    deduplicatedList.Count() == 1 &&
+                    filterText.Length > 0)
                 {
-                    uniqueItem = highlightedList[selectedItemIndex].CompletionItem;
+                    var uniqueItemIndex = itemsInList.IndexOf(i => Equals(i.FilterResult.CompletionItem, deduplicatedList.First()));
+                    uniqueItem = highlightedList[uniqueItemIndex].CompletionItem;
                 }
             }
 
@@ -259,9 +303,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             var bestOrFirstCompletionItem = bestItem ?? itemsInList.First().FilterResult.CompletionItem;
 
             // Check that it is a filter symbol. We can be called for a non-filter symbol.
+            // If inserting a non-filter character (neither IsPotentialFilterCharacter, nor Helpers.IsFilterCharacter), we should dismiss completion  
+            // except cases where this is the first symbol typed for the completion session (string.IsNullOrEmpty(filterText) or string.Equals(filterText, typeChar.ToString(), StringComparison.OrdinalIgnoreCase)).
+            // In the latter case, we should keep the completion because it was confirmed just before in InitializeCompletion.
             if (filterReason == CompletionFilterReason.Insertion &&
-                !IsPotentialFilterCharacter(typeChar) &&
                 !string.IsNullOrEmpty(filterText) &&
+                !string.Equals(filterText, typeChar.ToString(), StringComparison.OrdinalIgnoreCase) &&
+                !IsPotentialFilterCharacter(typeChar) &&
                 !Helpers.IsFilterCharacter(bestOrFirstCompletionItem, typeChar, filterText))
             {
                 return null;
@@ -503,6 +551,15 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
                 {
                     return true;
                 }
+
+                prefixLength1 = item1.FilterText.GetCaseSensitivePrefixLength(result1.FilterText);
+                prefixLength2 = item2.FilterText.GetCaseSensitivePrefixLength(result2.FilterText);
+
+                // If there are "Abc" vs "abc", we should prefer the case typed by user.
+                if (prefixLength1 > prefixLength2)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -591,7 +648,6 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             // can hard select this.
             return true;
         }
-
 
         /// <summary>
         /// Returns true if the completion item should be "soft" selected, or false if it should be "hard"

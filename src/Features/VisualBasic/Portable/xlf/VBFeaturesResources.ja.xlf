@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="Add_missing_Imports">
         <source>Add missing Imports</source>
-        <target state="translated">欠落しているインポートの追加</target>
+        <target state="translated">欠落している Import の追加</target>
         <note>{Locked="Import"} "Import" is a VB keyword and should not be localized.</note>
       </trans-unit>
       <trans-unit id="Add_Shadows">
@@ -74,7 +74,7 @@
       </trans-unit>
       <trans-unit id="Make_0_inheritable">
         <source>Make '{0}' inheritable</source>
-        <target state="new">Make '{0}' inheritable</target>
+        <target state="translated">'{0}' を継承可能にします</target>
         <note />
       </trans-unit>
       <trans-unit id="Move_the_0_statement_to_line_1">
@@ -95,6 +95,11 @@
       <trans-unit id="Remove_Unnecessary_Imports">
         <source>Remove Unnecessary Imports</source>
         <target state="translated">不要なインポートの削除</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Sort_Imports">
+        <source>&amp;Sort Imports</source>
+        <target state="translated">インポートの並べ替え(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="Type_a_name_here_to_declare_a_new_field">
@@ -923,7 +928,8 @@ Iterator Function(&lt;parameterList&gt;) As IEnumerable(Of &lt;T&gt;)</target>
       <trans-unit id="Performs_a_logical_exclusion_on_two_Boolean_expressions_or_a_bitwise_exclusion_on_two_numeric_expressions_For_Boolean_expressions_returns_True_if_exactly_one_of_the_expressions_evaluates_to_True_Both_expressions_are_always_evaluated_result_expression1_Xor_expression2">
         <source>Performs a logical exclusion on two Boolean expressions, or a bitwise exclusion on two numeric expressions. For Boolean expressions, returns True if exactly one of the expressions evaluates to True. Both expressions are always evaluated.
 &lt;result&gt; = &lt;expression1&gt; Xor &lt;expression2&gt;</source>
-        <target state="translated">2 つのブール式の場合は排他的論理演算、2 つの数値式の場合はビットごとの排他を求めます。ブール式の場合、2 つの式のうち 1 つのみが True と評価されたときは True を返します。常に両方の式が評価されます。r\n&lt;result&gt; = &lt;expression1&gt; Xor &lt;expression2&gt;</target>
+        <target state="translated">2 つのブール式の場合は排他的論理演算、2 つの数値式の場合はビットごとの排他を求めます。ブール式の場合、2 つの式のうち 1 つのみが True と評価されたときは True を返します。常に両方の式が評価されます。
+&lt;result&gt; = &lt;expression1&gt; Xor &lt;expression2&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="Applies_an_aggregation_function_such_as_Sum_Average_or_Count_to_a_sequence">
@@ -1688,7 +1694,7 @@ Sub(&lt;parameterList&gt;) &lt;statement&gt;</target>
       </trans-unit>
       <trans-unit id="Join_condition">
         <source>Join condition</source>
-        <target state="translated">結行条件</target>
+        <target state="translated">Join 条件</target>
         <note>{Locked="Join"} "Join" is a VB keyword and should not be localized.</note>
       </trans-unit>
       <trans-unit id="WithEvents_field">

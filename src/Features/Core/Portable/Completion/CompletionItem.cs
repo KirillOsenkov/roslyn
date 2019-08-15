@@ -77,12 +77,28 @@ namespace Microsoft.CodeAnalysis.Completion
         public CompletionItemRules Rules { get; }
 
         /// <summary>
-        /// The <see cref="Document"/> that this <see cref="CompletionItem"/> was
-        /// created for.  Not available to clients.  Only used by the Completion
-        /// subsystem itself for things like being able to go back to the originating
-        /// Document when doing things like getting descriptions.
+        /// The name of the <see cref="CompletionProvider"/> that created this 
+        /// <see cref="CompletionItem"/>. Not available to clients. Only used by 
+        /// the Completion subsystem itself for things like getting description text
+        /// and making additional change during commit.
         /// </summary>
-        internal Document Document { get; set; }
+        internal string ProviderName { get; set; }
+
+        /// <summary>
+        /// The automation text to use when narrating the completion item. If set to
+        /// null, narration will use the <see cref="DisplayText"/> instead.
+        /// </summary>
+        internal string AutomationText { get; set; }
+
+        /// <summary>
+        /// Indicate whether this <see cref="CompletionItem"/> is cached and reused across completion sessions. 
+        /// This might be used by completion system for things like deciding whether it can safaly cache and reuse
+        /// other data correspodning to this item.
+        ///
+        /// TODO: Revisit the approach we used for caching VS items.
+        ///       https://github.com/dotnet/roslyn/issues/35160
+        /// </summary>
+        internal bool IsCached { get; set; }
 
         private CompletionItem(
             string displayText,
@@ -240,7 +256,11 @@ namespace Microsoft.CodeAnalysis.Completion
                 rules: newRules,
                 displayTextPrefix: newDisplayTextPrefix,
                 displayTextSuffix: newDisplayTextSuffix,
-                inlineDescription: newInlineDescription);
+                inlineDescription: newInlineDescription)
+            {
+                AutomationText = AutomationText,
+                ProviderName = ProviderName
+            };
         }
 
         /// <summary>

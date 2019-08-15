@@ -2,6 +2,16 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="cs" original="../CodeAnalysisResources.resx">
     <body>
+      <trans-unit id="A_language_name_cannot_be_specified_for_this_option">
+        <source>A language name cannot be specified for this option.</source>
+        <target state="translated">Pro tuto možnost se nesmí zadat název jazyka.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="A_language_name_must_be_specified_for_this_option">
+        <source>A language name must be specified for this option.</source>
+        <target state="translated">Pro tuto možnost se musí zadat název jazyka.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CompilerAnalyzerThrowsDescription">
         <source>Analyzer '{0}' threw the following exception:
 '{1}'.</source>
@@ -469,6 +479,16 @@
         <target state="translated">Neplatný název jazykové verze: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="WRN_InvalidSeverityInAnalyzerConfig">
+        <source>The diagnostic '{0}' was given an invalid severity '{1}' in the analyzer config file at '{2}'.</source>
+        <target state="translated">Při diagnostice {0} byla v konfiguračním souboru analyzátoru v {2} předána neplatná závažnost {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WRN_InvalidSeverityInAnalyzerConfig_Title">
+        <source>Invalid severity in analyzer config file.</source>
+        <target state="translated">Neplatná závažnost v konfiguračním souboru analyzátoru</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WinRTIdentityCantBeRetargetable">
         <source>WindowsRuntime identity can't be retargetable</source>
         <target state="translated">U identity WindowsRuntime se nedá změnit cíl.</target>
@@ -810,7 +830,7 @@
       </trans-unit>
       <trans-unit id="SourceTextCannotBeEmbedded">
         <source>SourceText cannot be embedded. Provide encoding or canBeEmbedded=true at construction.</source>
-        <target state="translated">Zdrojový text se nedá vložit. Při vytváření zadejte kódování nebo canBeEmbedded=true.</target>
+        <target state="translated">SourceText se nedá vložit. Při vytváření zadejte kódování nebo canBeEmbedded=true.</target>
         <note />
       </trans-unit>
       <trans-unit id="StreamIsTooLong">

@@ -420,6 +420,8 @@ namespace Microsoft.CodeAnalysis
 
         System_Runtime_CompilerServices_NullableAttribute__ctorByte,
         System_Runtime_CompilerServices_NullableAttribute__ctorTransformFlags,
+        System_Runtime_CompilerServices_NullableContextAttribute__ctor,
+        System_Runtime_CompilerServices_NullablePublicOnlyAttribute__ctor,
         System_Runtime_CompilerServices_ReferenceAssemblyAttribute__ctor,
         System_Runtime_CompilerServices_IsReadOnlyAttribute__ctor,
         System_Runtime_CompilerServices_IsByRefLikeAttribute__ctor,
@@ -451,6 +453,8 @@ namespace Microsoft.CodeAnalysis
         System_Range__StartAt,
         System_Range__EndAt,
         System_Range__get_All,
+        System_Range__get_Start,
+        System_Range__get_End,
 
         System_Runtime_CompilerServices_AsyncIteratorStateMachineAttribute__ctor,
 
@@ -488,6 +492,11 @@ namespace Microsoft.CodeAnalysis
         System_InvalidOperationException__ctor,
         System_Runtime_CompilerServices_SwitchExpressionException__ctor,
         System_Runtime_CompilerServices_SwitchExpressionException__ctorObject,
+
+        System_Threading_CancellationToken__Equals,
+        System_Threading_CancellationTokenSource__CreateLinkedTokenSource,
+        System_Threading_CancellationTokenSource__Token,
+        System_Threading_CancellationTokenSource__Dispose,
 
         Count
 

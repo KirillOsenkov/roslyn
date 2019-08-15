@@ -90,7 +90,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.LoadKeyword:
                 case SyntaxKind.NullableKeyword:
                 case SyntaxKind.EnableKeyword:
-                case SyntaxKind.SafeOnlyKeyword:
+                case SyntaxKind.WarningsKeyword:
+                case SyntaxKind.AnnotationsKeyword:
                     return true;
                 default:
                     return false;
@@ -118,7 +119,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.DisableKeyword:
                 case SyntaxKind.RestoreKeyword:
                 case SyntaxKind.EnableKeyword:
-                case SyntaxKind.SafeOnlyKeyword:
+                case SyntaxKind.WarningsKeyword:
+                case SyntaxKind.AnnotationsKeyword:
                     return false;
                 default:
                     return IsPreprocessorKeyword(kind);
@@ -202,7 +204,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.LoadKeyword:
                 case SyntaxKind.NullableKeyword:
                 case SyntaxKind.EnableKeyword:
-                case SyntaxKind.SafeOnlyKeyword:
                 case SyntaxKind.UnderscoreToken:
                     return true;
                 default:
@@ -1062,8 +1063,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return SyntaxKind.NullableKeyword;
                 case "enable":
                     return SyntaxKind.EnableKeyword;
-                case "safeonly":
-                    return SyntaxKind.SafeOnlyKeyword;
+                case "warnings":
+                    return SyntaxKind.WarningsKeyword;
+                case "annotations":
+                    return SyntaxKind.AnnotationsKeyword;
                 default:
                     return SyntaxKind.None;
             }
@@ -1556,8 +1559,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return "nullable";
                 case SyntaxKind.EnableKeyword:
                     return "enable";
-                case SyntaxKind.SafeOnlyKeyword:
-                    return "safeonly";
+                case SyntaxKind.WarningsKeyword:
+                    return "warnings";
+                case SyntaxKind.AnnotationsKeyword:
+                    return "annotations";
 
                 // contextual keywords
                 case SyntaxKind.YieldKeyword:

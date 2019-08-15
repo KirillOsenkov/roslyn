@@ -4,12 +4,17 @@
     <body>
       <trans-unit id="ERR_CommentsAfterLineContinuationNotAvailable1">
         <source>Please use language version {0} or greater to use comments after line continuation character.</source>
-        <target state="new">Please use language version {0} or greater to use comments after line continuation character.</target>
+        <target state="translated">Verwenden Sie Sprachversion {0} oder höher, um Kommentare nach dem Zeilenfortsetzungszeichen zu verwenden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ERR_MultipleAnalyzerConfigsInSameDir">
+        <source>Multiple analyzer config files cannot be in the same directory ('{0}').</source>
+        <target state="translated">Dasselbe Verzeichnis ({0}) darf nicht mehrere Konfigurationsdateien des Analysetools enthalten.</target>
         <note />
       </trans-unit>
       <trans-unit id="FEATURE_CommentsAfterLineContinuation">
         <source>comments after line continuation</source>
-        <target state="new">comments after line continuation</target>
+        <target state="translated">Kommentare nach Zeilenfortsetzung</target>
         <note />
       </trans-unit>
       <trans-unit id="FEATURE_UnconstrainedTypeParameterInConditional">
@@ -17,7 +22,7 @@
         <target state="translated">Nicht eingeschränkte Typparameter in binären bedingten Ausdrücken</target>
         <note />
       </trans-unit>
-	  <trans-unit id="IDS_VBCHelp">
+      <trans-unit id="IDS_VBCHelp">
         <source>                  Visual Basic Compiler Options
 
                                   - OUTPUT FILE -
@@ -3230,7 +3235,7 @@
       </trans-unit>
       <trans-unit id="ERR_LineContWithCommentOrNoPrecSpace">
         <source>The line continuation character '_' must be preceded by at least one white space and it must be followed by a comment or the '_' must be the last character on the line.</source>
-        <target state="needs-review-translation">Vor dem Zeilenfortsetzungszeichen "_" muss mindestens eine Leerstelle stehen, und es muss das letzte Zeichen der Zeile sein.</target>
+        <target state="translated">Dem Zeilenfortsetzungszeichen "_" muss mindestens ein Leerzeichen vorangestellt sein und ein Kommentar folgen, oder "_" muss das letzte Zeichen in der Zeile sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="ERR_BadModuleFile1">

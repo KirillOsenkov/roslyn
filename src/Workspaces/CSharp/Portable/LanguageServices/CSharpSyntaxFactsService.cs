@@ -126,9 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         public bool IsDirective(SyntaxNode node)
-        {
-            return node is DirectiveTriviaSyntax;
-        }
+            => node is DirectiveTriviaSyntax;
 
         public bool TryGetExternalSourceInfo(SyntaxNode node, out ExternalSourceInfo info)
         {
@@ -1716,6 +1714,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override bool IsMultiLineCommentTrivia(SyntaxTrivia trivia)
             => trivia.IsMultiLineComment();
 
+        public override bool IsSingleLineDocCommentTrivia(SyntaxTrivia trivia)
+            => trivia.IsSingleLineDocComment();
+
+        public override bool IsMultiLineDocCommentTrivia(SyntaxTrivia trivia)
+            => trivia.IsMultiLineDocComment();
+
         public override bool IsShebangDirectiveTrivia(SyntaxTrivia trivia)
             => trivia.IsShebangDirective();
 
@@ -1949,8 +1953,5 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return null;
         }
-
-        public bool SpansPreprocessorDirective(IEnumerable<SyntaxNode> nodes)
-            => nodes.SpansPreprocessorDirective();
     }
 }

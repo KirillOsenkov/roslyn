@@ -46,9 +46,6 @@ namespace Microsoft.CodeAnalysis.UseCompoundAssignment
         protected abstract TSyntaxKind GetAnalysisKind();
         protected abstract bool IsSupported(TSyntaxKind assignmentKind, ParseOptions options);
 
-        public override bool OpenFileOnly(Workspace workspace)
-            => false;
-
         public override DiagnosticAnalyzerCategory GetAnalyzerCategory()
             => DiagnosticAnalyzerCategory.SemanticSpanAnalysis;
 
@@ -97,7 +94,7 @@ namespace Microsoft.CodeAnalysis.UseCompoundAssignment
             }
 
             _syntaxFacts.GetPartsOfBinaryExpression(binaryExpression,
-                out var binaryLeft, out _);
+                out var binaryLeft, out var binaryRight);
 
             // has to be of the form:   expr = expr op ...
             if (!_syntaxFacts.AreEquivalent(assignmentLeft, binaryLeft))
@@ -108,6 +105,12 @@ namespace Microsoft.CodeAnalysis.UseCompoundAssignment
             // Don't offer if this is `x = x + 1` inside an obj initializer like:
             // `new Point { x = x + 1 }`
             if (_syntaxFacts.IsObjectInitializerNamedAssignmentIdentifier(assignmentLeft))
+            {
+                return;
+            }
+
+            // Don't offer if this is `x = x ?? throw new Exception()`
+            if (_syntaxFacts.IsThrowExpression(binaryRight))
             {
                 return;
             }
