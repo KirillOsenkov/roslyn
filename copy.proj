@@ -52,6 +52,7 @@
     <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).dll')" />
     <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures\Release\net472\Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.Elfie.dll" />
   </ItemGroup>
 
   <Target Name="Build">
