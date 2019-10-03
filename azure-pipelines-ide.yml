@@ -10,6 +10,10 @@ jobs:
   pool:
     vmImage: windows-latest
   steps:
+    - task: NuGetToolInstaller@1
+      displayName: Download latest NuGetCommand
+      inputs:
+        checkLatest: true
     - script: eng/cibuild.cmd -configuration Release -prepareMachine
       displayName: Build
     - task: PublishBuildArtifacts@1
