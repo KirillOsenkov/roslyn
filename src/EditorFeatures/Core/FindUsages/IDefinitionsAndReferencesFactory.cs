@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.Editor.FindUsages
             var displayIfNoReferences = definition.ShouldShowWithNoReferenceLocations(
                 options, showMetadataSymbolsWithoutReferences: false);
 
-            var sourceLocations = ArrayBuilder<DocumentSpan>.GetInstance();
+            using var sourceLocationsDisposer = ArrayBuilder<DocumentSpan>.GetInstance(out var sourceLocations);
 
             var properties = GetProperties(definition);
 
@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.Editor.FindUsages
             }
 
             return DefinitionItem.Create(
-                tags, displayParts, sourceLocations.ToImmutableAndFree(),
+                tags, displayParts, sourceLocations.ToImmutable(),
                 nameDisplayParts, properties, displayIfNoReferences);
         }
 
@@ -225,7 +225,7 @@ namespace Microsoft.CodeAnalysis.Editor.FindUsages
                     SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers |
                     SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
-        private static SymbolDisplayFormat s_parameterDefinitionFormat = s_definitionFormat
+        private static readonly SymbolDisplayFormat s_parameterDefinitionFormat = s_definitionFormat
             .AddParameterOptions(SymbolDisplayParameterOptions.IncludeName);
     }
 }

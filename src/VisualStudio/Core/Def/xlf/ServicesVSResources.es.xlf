@@ -57,6 +57,11 @@
         <target state="translated">Atrás</target>
         <note />
       </trans-unit>
+      <trans-unit id="Build_plus_live_analysis_NuGet_package">
+        <source>Build + live analysis (NuGet package)</source>
+        <target state="translated">Compilación y análisis en directo (paquete NuGet)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Calculating_dependents">
         <source>Calculating dependents...</source>
         <target state="translated">Calculando dependientes...</target>
@@ -82,6 +87,11 @@
         <target state="translated">Habilitar características de IDE de análisis de referencias que aceptan valores NULL</target>
         <note />
       </trans-unit>
+      <trans-unit id="Evaluating_0_tasks_in_queue">
+        <source>Evaluating ({0} tasks in queue)</source>
+        <target state="translated">Evaluando ({0} tareas en cola)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Finish">
         <source>Finish</source>
         <target state="translated">Finalizar</target>
@@ -102,6 +112,11 @@
         <target state="translated">En otros operadores</target>
         <note />
       </trans-unit>
+      <trans-unit id="Install_Microsoft_recommended_Roslyn_analyzers_which_provide_additional_diagnostics_and_fixes_for_common_API_design_security_performance_and_reliability_issues">
+        <source>Install Microsoft-recommended Roslyn analyzers, which provide additional diagnostics and fixes for common API design, security, performance, and reliability issues</source>
+        <target state="translated">Instale los analizadores de Roslyn recomendados por Microsoft, que proporcionan diagnósticos y correcciones adicionales para problemas comunes de confiabilidad, rendimiento, seguridad y diseño de API.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Interface_cannot_have_field">
         <source>Interface cannot have field.</source>
         <target state="translated">La interfaz no puede tener campos.</target>
@@ -117,9 +132,9 @@
         <target state="translated">Tipo</target>
         <note />
       </trans-unit>
-      <trans-unit id="Live_analysis">
-        <source>Live analysis</source>
-        <target state="translated">Análisis activo</target>
+      <trans-unit id="Live_analysis_VSIX_extension">
+        <source>Live analysis (VSIX extension)</source>
+        <target state="translated">Análisis en directo (extensión VSIX)</target>
         <note />
       </trans-unit>
       <trans-unit id="Make_0_abstract">
@@ -317,6 +332,11 @@
         <target state="translated">Preferencias de paréntesis:</target>
         <note />
       </trans-unit>
+      <trans-unit id="Paused_0_tasks_in_queue">
+        <source>Paused ({0} tasks in queue)</source>
+        <target state="translated">En pausa ({0} tareas en cola)</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Prefer_compound_assignments">
         <source>Prefer compound assignments</source>
         <target state="translated">Preferir asignaciones compuestas</target>
@@ -375,6 +395,11 @@
       <trans-unit id="Review_Changes">
         <source>Review Changes</source>
         <target state="translated">Revisar cambios</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Running_low_priority_background_processes">
+        <source>Running low priority background processes</source>
+        <target state="translated">Ejecutando procesos en segundo plano de baja prioridad</target>
         <note />
       </trans-unit>
       <trans-unit id="Save_dot_editorconfig_file">
@@ -440,6 +465,11 @@
       <trans-unit id="Unused_value_is_explicitly_assigned_to_discard">
         <source>Unused value is explicitly assigned to discard</source>
         <target state="translated">El valor sin usar se asigna explícitamente para descartar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Use_editorconfig_compatibility_mode">
+        <source>Use .editorconfig compatibility mode (requires restart)</source>
+        <target state="translated">Usar el modo de compatibilidad .editorconfig (requiere reiniciar el equipo)</target>
         <note />
       </trans-unit>
       <trans-unit id="Use_enhanced_colors_for_C_and_Basic">
@@ -1793,11 +1823,6 @@ Información adicional: {1}</target>
         <target state="translated">Opciones</target>
         <note />
       </trans-unit>
-      <trans-unit id="Try_the_preview_version_of_our_live_code_analysis_extension_which_provides_more_fixes_for_common_API_design_naming_performance_and_reliability_issues">
-        <source>Try the preview version of our live code analysis extension, which provides more fixes for common API design, naming, performance, and reliability issues</source>
-        <target state="translated">Pruebe la versión preliminar de nuestra extensión de análisis de código activo, que proporciona más correcciones para problemas comunes de diseño de API, nomenclatura, rendimiento y confiabilidad</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Never_show_this_again">
         <source>Never show this again</source>
         <target state="translated">No volver a mostrar</target>
@@ -1843,30 +1868,6 @@ Información adicional: {1}</target>
         <target state="translated">Atenuando</target>
         <note />
       </trans-unit>
-      <trans-unit id="ChangesNotAllowedIFAssemblyHasNotBeenLoaded">
-        <source>Changes are not allowed if the assembly has not been loaded.</source>
-        <target state="translated">No se permiten cambios si no se ha cargado el ensamblado.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ChangesNotAllowedIfProjectWasntBuildWhenDebuggingStarted">
-        <source>Changes are not allowed if the project wasn't built when debugging started.</source>
-        <target state="translated">No se permiten cambios si el proyecto no se compiló al iniciar la depuración.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ChangesNotAllowedIfProjectWasntLoadedWhileDebugging">
-        <source>Changes are not allowed if the project wasn't loaded and built when debugging started.
-
-'Lightweight solution load' is enabled for the current solution. Disable it to ensure that all projects are loaded when debugging starts.</source>
-        <target state="translated">No se permiten cambios si el proyecto no se cargó y compiló al iniciar la depuración.
-
-La opción "Carga de solución ligera" está habilitada para la solución actual. Deshabilítela para asegurarse de que todos los proyectos se cargan al iniciar la depuración.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ChangesNotAllowedWhileCodeIsRunning">
-        <source>Changes are not allowed while code is running.</source>
-        <target state="translated">No se permiten cambios mientras se ejecuta código.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Prefer_local_function_over_anonymous_function">
         <source>Prefer local function over anonymous function</source>
         <target state="translated">Preferir una función local frente a una función anónima</target>
@@ -1902,19 +1903,9 @@ La opción "Carga de solución ligera" está habilitada para la solución actual
         <target state="translated">preferir propiedades automáticas</target>
         <note />
       </trans-unit>
-      <trans-unit id="ErrorReadingFile">
-        <source>Error while reading file '{0}': {1}</source>
-        <target state="translated">Error al leer el archivo "{0}": {1}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ModuleHasBeenUnloaded">
         <source>Module has been unloaded.</source>
         <target state="translated">El módulo se descargó.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CantApplyChangesModuleHasBeenUnloaded">
-        <source>Can't apply changes -- module '{0}' has been unloaded.</source>
-        <target state="translated">No se pueden aplicar cambios: el módulo "{0}" se ha descargado.</target>
         <note />
       </trans-unit>
       <trans-unit id="Enable_navigation_to_decompiled_sources">
@@ -1956,11 +1947,6 @@ Estoy de acuerdo con todo lo anterior:</target>
       <trans-unit id="Sync_Class_View">
         <source>Sync Class View</source>
         <target state="translated">Sincronizar vista de clases</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CantApplyChangesUnexpectedError">
-        <source>Can't apply changes -- unexpected error: '{0}'</source>
-        <target state="translated">No se pueden aplicar los cambios: error inesperado "{0}"</target>
         <note />
       </trans-unit>
       <trans-unit id="Analyzing_0">

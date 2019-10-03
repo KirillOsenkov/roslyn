@@ -694,6 +694,23 @@ public class SomeClass : Base
         }
 
         [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
+        public async Task NullableAnnotationsIncluded()
+        {
+            var markup = @"#nullable enable
+
+public abstract class Base
+{
+    public abstract void Goo(string? s);
+}
+
+public class SomeClass : Base
+{
+    override $$
+}";
+            await VerifyItemExistsAsync(markup, "Goo(string? s)");
+        }
+
+        [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
         public async Task EscapedMethodNameInIntelliSenseList()
         {
             var markup = @"public abstract class Base
@@ -1632,6 +1649,121 @@ public class b : a
         }
 
         [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
+        public async Task CommitMethodWithNullableAttributes()
+        {
+            var markupBeforeCommit = @"
+#nullable enable
+
+class C
+{
+    public virtual string? Goo(string? s) { }
+}
+
+class D : C
+{
+    override $$
+}";
+
+            var expectedCodeAfterCommit = @"
+#nullable enable
+
+class C
+{
+    public virtual string? Goo(string? s) { }
+}
+
+class D : C
+{
+    public override string? Goo(string? s)
+    {
+        return base.Goo(s);$$
+    }
+}";
+
+            await VerifyCustomCommitProviderAsync(markupBeforeCommit, "Goo(string? s)", expectedCodeAfterCommit);
+        }
+
+        [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
+        public async Task CommitMethodInNullableDisableContext()
+        {
+            var markupBeforeCommit = @"
+#nullable enable
+
+class C
+{
+    public virtual string? Goo(string? s) { }
+}
+
+#nullable disable
+
+class D : C
+{
+    override $$
+}";
+
+            var expectedCodeAfterCommit = @"
+#nullable enable
+
+class C
+{
+    public virtual string? Goo(string? s) { }
+}
+
+#nullable disable
+
+class D : C
+{
+    public override string Goo(string s)
+    {
+        return base.Goo(s);$$
+    }
+}";
+
+            await VerifyCustomCommitProviderAsync(markupBeforeCommit, "Goo(string? s)", expectedCodeAfterCommit);
+        }
+
+        [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
+        public async Task CommitToStringIsExplicitlyNonNullReturning()
+        {
+            var markupBeforeCommit = @"
+#nullable enable
+
+namespace System
+{
+    public class Object
+    {
+        public virtual string? ToString() { }
+    }
+}
+
+class D : System.Object
+{
+    override $$
+}";
+
+            var expectedCodeAfterCommit = @"
+#nullable enable
+
+namespace System
+{
+    public class Object
+    {
+        public virtual string? ToString() { }
+    }
+}
+
+class D : System.Object
+{
+    public override string ToString()
+    {
+        return base.ToString();$$
+    }
+}";
+
+            await VerifyCustomCommitProviderAsync(markupBeforeCommit, "ToString()", expectedCodeAfterCommit);
+        }
+
+        [WpfFact, Trait(Traits.Feature, Traits.Features.Completion)]
         public async Task CommitInsertIndexer()
         {
             var markupBeforeCommit = @"public class MyIndexer<T>
@@ -2244,7 +2376,7 @@ End Class
                 {
                     var textView = testWorkspace.GetTestDocument(documentId).GetTextView();
                     customCommitCompletionProvider.Commit(completionItem, textView, textView.TextBuffer, textView.TextSnapshot, '\t');
-                    string actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
+                    var actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
                     var caretPosition = textView.Caret.Position.BufferPosition.Position;
                     MarkupTestFile.GetPosition(csharpFileAfterCommit, out var actualExpectedCode, out int expectedCaretPosition);
 
@@ -2500,7 +2632,7 @@ int bar;
                 {
                     var textView = testWorkspace.GetTestDocument(documentId).GetTextView();
                     customCommitCompletionProvider.Commit(completionItem, textView, textView.TextBuffer, textView.TextSnapshot, '\t');
-                    string actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
+                    var actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
                     var caretPosition = textView.Caret.Position.BufferPosition.Position;
                     MarkupTestFile.GetPosition(csharpFileAfterCommit, out var actualExpectedCode, out int expectedCaretPosition);
 
@@ -2555,7 +2687,7 @@ int bar;
                 {
                     var textView = testWorkspace.GetTestDocument(documentId).GetTextView();
                     customCommitCompletionProvider.Commit(completionItem, textView, textView.TextBuffer, textView.TextSnapshot, '\t');
-                    string actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
+                    var actualCodeAfterCommit = textView.TextBuffer.CurrentSnapshot.AsText().ToString();
                     var caretPosition = textView.Caret.Position.BufferPosition.Position;
                     MarkupTestFile.GetPosition(csharpFileAfterCommit, out var actualExpectedCode, out int expectedCaretPosition);
 
@@ -2852,7 +2984,7 @@ public class SomeClass : Base
                 document.Project.Solution.Workspace.TryApplyChanges(newDoc.Project.Solution);
 
                 var textBuffer = workspace.Documents.Single().TextBuffer;
-                string actualCodeAfterCommit = textBuffer.CurrentSnapshot.AsText().ToString();
+                var actualCodeAfterCommit = textBuffer.CurrentSnapshot.AsText().ToString();
 
                 Assert.Equal(after, actualCodeAfterCommit);
             }

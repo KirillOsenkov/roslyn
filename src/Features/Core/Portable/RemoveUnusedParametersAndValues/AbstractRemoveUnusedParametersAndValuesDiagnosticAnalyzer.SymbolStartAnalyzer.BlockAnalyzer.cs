@@ -333,10 +333,13 @@ namespace Microsoft.CodeAnalysis.RemoveUnusedParametersAndValues
                             return false;
 
                         default:
-                            if (operationBlock.HasAnyOperationDescendant(o => o.Kind == OperationKind.None))
+                            if (operationBlock.HasAnyOperationDescendant(o => o.Kind == OperationKind.None ||
+                                (o is IConditionalOperation conditional && conditional.IsRef) ||
+                                (o is ISimpleAssignmentOperation assignment && assignment.IsRef)))
                             {
-                                // Workaround for https://github.com/dotnet/roslyn/issues/32100
-                                // Bail out in presence of OperationKind.None - not implemented IOperation.
+                                // Workarounds for:
+                                // 1) https://github.com/dotnet/roslyn/issues/32100: Bail out in presence of OperationKind.None - not implemented IOperation.
+                                // 2) https://github.com/dotnet/roslyn/issues/31007: We cannot perform flow analysis correctly for a ref assignment operation or ref conditional operation until this compiler feature is implemented.
                                 return false;
                             }
 
@@ -414,9 +417,7 @@ namespace Microsoft.CodeAnalysis.RemoveUnusedParametersAndValues
                     try
                     {
                         // Flag indicating if we found an operation block where all symbol writes were used. 
-                        bool hasBlockWithAllUsedWrites;
-
-                        AnalyzeUnusedValueAssignments(context, isComputingUnusedParams, symbolUsageResultsBuilder, out hasBlockWithAllUsedWrites);
+                        AnalyzeUnusedValueAssignments(context, isComputingUnusedParams, symbolUsageResultsBuilder, out var hasBlockWithAllUsedWrites);
 
                         AnalyzeUnusedParameters(context, isComputingUnusedParams, symbolUsageResultsBuilder, hasBlockWithAllUsedWrites);
                     }
@@ -600,7 +601,7 @@ namespace Microsoft.CodeAnalysis.RemoveUnusedParametersAndValues
                         return false;
                     }
 
-                    bool IsRemovableAssignmentValueWithoutSideEffects(IOperation assignmentValue)
+                    static bool IsRemovableAssignmentValueWithoutSideEffects(IOperation assignmentValue)
                     {
                         if (assignmentValue.ConstantValue.HasValue)
                         {
@@ -686,8 +687,8 @@ namespace Microsoft.CodeAnalysis.RemoveUnusedParametersAndValues
 
                     foreach (var parameter in method.Parameters)
                     {
-                        bool isUsed = false;
-                        bool isSymbolRead = false;
+                        var isUsed = false;
+                        var isSymbolRead = false;
                         var isRefOrOutParam = parameter.IsRefOrOut();
 
                         // Iterate through symbol usage results for each operation block.
