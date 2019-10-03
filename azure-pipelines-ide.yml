@@ -5,7 +5,8 @@ trigger:
 jobs:
 - job: Windows_Desktop
   variables:
-    nugetVersion: 1.0.$[counter(nugetIncrementalVersion, 0)]
+    major: 1
+    nugetVersion: $[counter(variables['major'], 0)]
   pool:
     vmImage: windows-latest
   steps:
@@ -28,7 +29,7 @@ jobs:
       displayName: Create the nuget package
       inputs:
         command: pack
-        arguments: roslyn.nuspec -OutputDirectory artifacts -Version $(nugetVersion)
+        arguments: roslyn.nuspec -OutputDirectory artifacts -Version 1.0.$(nugetVersion)
     - task: NuGetCommand@2
       displayName: 'NuGet push'
       inputs:
