@@ -5,9 +5,7 @@ trigger:
 jobs:
 - job: Windows_Desktop
   pool:
-    name: Azure Pipelines
-    vmImage: windows-2019
-
+    vmImage: windows-latest
   steps:
     - script: eng/cibuild.cmd -configuration $(_configuration) -prepareMachine
       displayName: Build
