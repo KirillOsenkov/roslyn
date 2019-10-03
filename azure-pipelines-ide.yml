@@ -14,7 +14,7 @@ jobs:
       displayName: Download latest NuGetCommand
       inputs:
         checkLatest: true
-    - script: eng/cibuild.cmd -configuration Release -prepareMachine
+    - script: eng/cibuild.cmd -configuration Release -prepareMachine /p:DotNetUseShippingVersions=true
       displayName: Build
     - task: PublishBuildArtifacts@1
       displayName: Publish Logs
