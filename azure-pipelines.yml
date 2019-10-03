@@ -7,14 +7,14 @@ jobs:
   pool:
     vmImage: windows-latest
   steps:
-    - script: eng/cibuild.cmd -configuration $(_configuration) -prepareMachine
+    - script: eng/cibuild.cmd -configuration Release -prepareMachine
       displayName: Build
 
     - task: PublishBuildArtifacts@1
       displayName: Publish Logs
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)\artifacts\log\$(_configuration)'
-        ArtifactName: 'Windows Desktop $(_configuration)' 
+        PathtoPublish: '$(Build.SourcesDirectory)\artifacts\log\Release'
+        ArtifactName: 'Windows Desktop Release' 
         publishLocation: Container
       continueOnError: true
       condition: not(succeeded())
