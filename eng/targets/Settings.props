@@ -88,6 +88,7 @@
     <InternalsVisibleTo Include="Microsoft.Ide.Roslyn" Key="$(IdePublicKey)" />
     <InternalsVisibleTo Include="Microsoft.Ide.Roslyn.ProjectSystem" Key="$(IdePublicKey)" />
     <InternalsVisibleTo Include="Microsoft.Ide.Roslyn.VisualStudio" Key="$(IdePublicKey)" />
+    <InternalsVisibleTo Include="Microsoft.Ide.Web" Key="$(IdePublicKey)" />
   </ItemGroup>
 
   <!-- 
