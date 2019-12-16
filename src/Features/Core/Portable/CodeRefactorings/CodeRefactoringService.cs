@@ -111,7 +111,14 @@ namespace Microsoft.CodeAnalysis.CodeRefactorings
                 foreach (var provider in GetProviders(document))
                 {
                     tasks.Add(Task.Run(
-                        () => GetRefactoringFromProviderAsync(document, state, provider, extensionManager, isBlocking, cancellationToken), cancellationToken));
+                        () =>
+                        {
+                            using (RoslynEventSource.LogInformationalBlock(FunctionId.Refactoring_CodeRefactoringService_GetRefactoringsAsync, provider, cancellationToken))
+                            {
+                                return GetRefactoringFromProviderAsync(document, state, provider, extensionManager, isBlocking, cancellationToken);
+                            }
+                        },
+                        cancellationToken));
                 }
 
                 var results = await Task.WhenAll(tasks).ConfigureAwait(false);
@@ -135,16 +142,16 @@ namespace Microsoft.CodeAnalysis.CodeRefactorings
 
             try
             {
-                var actions = ArrayBuilder<CodeAction>.GetInstance();
+                var actions = ArrayBuilder<(CodeAction action, TextSpan? applicableToSpan)>.GetInstance();
                 var context = new CodeRefactoringContext(document, state,
 
                     // TODO: Can we share code between similar lambdas that we pass to this API in BatchFixAllProvider.cs, CodeFixService.cs and CodeRefactoringService.cs?
-                    a =>
+                    (action, applicableToSpan) =>
                     {
                         // Serialize access for thread safety - we don't know what thread the refactoring provider will call this delegate from.
                         lock (actions)
                         {
-                            actions.Add(a);
+                            actions.Add((action, applicableToSpan));
                         }
                     },
                     isBlocking,

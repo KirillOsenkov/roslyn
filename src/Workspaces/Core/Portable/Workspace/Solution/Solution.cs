@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public Project? GetProject(IAssemblySymbol assemblySymbol, CancellationToken cancellationToken = default)
         {
-            var projectState = _state.GetProjectState(assemblySymbol, cancellationToken);
+            var projectState = _state.GetProjectState(assemblySymbol);
 
             return projectState == null ? null : GetProject(projectState.Id);
         }
@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
-        /// Gets the additional document in this solution with the specified document ID.
+        /// Gets the analyzer config document in this solution with the specified document ID.
         /// </summary>
         public AnalyzerConfigDocument? GetAnalyzerConfigDocument(DocumentId? documentId)
         {

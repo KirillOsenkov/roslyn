@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -22,7 +21,6 @@ using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.Text.Shared.Extensions;
 using Microsoft.VisualStudio.Core.Imaging;
-using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
@@ -36,6 +34,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
     internal class CompletionSource : ForegroundThreadAffinitizedObject, IAsyncExpandingCompletionSource
     {
         internal const string RoslynItem = nameof(RoslynItem);
+        internal const string TriggerLocation = nameof(TriggerLocation);
         internal const string CompletionListSpan = nameof(CompletionListSpan);
         internal const string InsertionText = nameof(InsertionText);
         internal const string HasSuggestionItemOptions = nameof(HasSuggestionItemOptions);
@@ -59,6 +58,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
         private readonly bool _isDebuggerTextView;
         private readonly ImmutableHashSet<string> _roles;
         private readonly Lazy<IStreamingFindUsagesPresenter> _streamingPresenter;
+        private bool _snippetCompletionTriggeredIndirectly;
 
         internal CompletionSource(ITextView textView, Lazy<IStreamingFindUsagesPresenter> streamingPresenter, IThreadingContext threadingContext)
             : base(threadingContext)
@@ -105,6 +105,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             // In case of calls with multiple completion services for the same view (e.g. TypeScript and C#), those completion services must not be called simultaneously for the same session.
             // Therefore, in each completion session we use a list of commit character for a specific completion service and a specific content type.
             _textView.Properties[PotentialCommitCharacters] = service.GetRules().DefaultCommitCharacters;
+
+            // Reset a flag which means a snippet triggerred by ? + Tab.
+            // Set it later if met the condition.
+            _snippetCompletionTriggeredIndirectly = false;
 
             CheckForExperimentStatus(_textView, document);
 
@@ -172,7 +176,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             return false;
         }
 
-        private static bool TryInvokeSnippetCompletion(
+        private bool TryInvokeSnippetCompletion(
             CompletionService completionService, Document document, SourceText text, int caretPoint)
         {
             var rules = completionService.GetRules();
@@ -198,6 +202,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             var textChange = new TextChange(TextSpan.FromBounds(caretPoint - 2, caretPoint), string.Empty);
             document.Project.Solution.Workspace.ApplyTextChanges(document.Id, textChange, CancellationToken.None);
 
+            _snippetCompletionTriggeredIndirectly = true;
             return true;
         }
 
@@ -247,6 +252,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             var completionService = document.GetLanguageService<CompletionService>();
 
             var roslynTrigger = Helpers.GetRoslynTrigger(trigger, triggerLocation);
+            if (_snippetCompletionTriggeredIndirectly)
+            {
+                roslynTrigger = new CodeAnalysis.Completion.CompletionTrigger(CompletionTriggerKind.Snippets);
+            }
 
             var workspace = document.Project.Solution.Workspace;
 
@@ -276,7 +285,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
                 foreach (var roslynItem in completionList.Items)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    var item = Convert(document, roslynItem, filterSet);
+                    var item = Convert(document, roslynItem, filterSet, triggerLocation);
                     itemsBuilder.Add(item);
                 }
 
@@ -369,7 +378,9 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
         /// </summary>
         private readonly struct VSCompletionItemData
         {
-            public VSCompletionItemData(string displayText, ImageElement icon, ImmutableArray<AsyncCompletionData.CompletionFilter> filters, int filterSetData, ImmutableArray<ImageElement> attributeIcons, string insertionText)
+            public VSCompletionItemData(
+                string displayText, ImageElement icon, ImmutableArray<AsyncCompletionData.CompletionFilter> filters,
+                int filterSetData, ImmutableArray<ImageElement> attributeIcons, string insertionText)
             {
                 DisplayText = displayText;
                 Icon = icon;
@@ -398,7 +409,8 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
         private VSCompletionItem Convert(
             Document document,
             RoslynCompletionItem roslynItem,
-            FilterSet filterSet)
+            FilterSet filterSet,
+            SnapshotPoint triggerLocation)
         {
             VSCompletionItemData itemData;
 
@@ -452,6 +464,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
                 attributeIcons: itemData.AttributeIcons);
 
             item.Properties.AddProperty(RoslynItem, roslynItem);
+            item.Properties.AddProperty(TriggerLocation, triggerLocation);
 
             return item;
         }
@@ -503,142 +516,6 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             }
 
             return current == questionPosition;
-        }
-
-        /// <summary>
-        /// Provides an efficient way to compute a set of completion filters associated with a collection of completion items.
-        /// Presence of expander and filter in the set have different meanings. Set contains a filter means the filter is
-        /// available but unselected, whereas it means available and selected for an expander. Note that even though VS supports 
-        /// having multiple expanders, we only support one.
-        /// </summary>
-        private class FilterSet
-        {
-            // Cache all the VS completion filters which essentially make them singletons.
-            // Because all items that should be filtered using the same filter button must 
-            // use the same reference to the instance of CompletionFilter.
-            private static readonly Dictionary<string, AsyncCompletionData.CompletionFilter> s_filterCache =
-                new Dictionary<string, AsyncCompletionData.CompletionFilter>();
-
-            private BitVector32 _vector;
-            private static readonly ImmutableArray<int> s_filterMasks;
-            private static readonly int s_expanderMask;
-            private static AsyncCompletionData.CompletionExpander _expander = null;
-
-            public static ImmutableArray<CompletionItemFilter> Filters => CompletionItemFilter.AllFilters;
-
-            public static AsyncCompletionData.CompletionExpander Expander
-            {
-                get
-                {
-                    if (_expander == null)
-                    {
-                        var addImageId = Shared.Extensions.GlyphExtensions.GetImageCatalogImageId(KnownImageIds.ExpandScope);
-                        _expander = new AsyncCompletionData.CompletionExpander(
-                            EditorFeaturesResources.Expander_display_text,
-                            accessKey: "a",
-                            new ImageElement(addImageId, EditorFeaturesResources.Expander_image_element));
-                    }
-
-                    return _expander;
-                }
-            }
-
-            public int Data => _vector.Data;
-
-            static FilterSet()
-            {
-                var length = Filters.Length;
-                Debug.Assert(length <= 32);
-
-                var previousMask = 0;
-                var builder = ArrayBuilder<int>.GetInstance(length);
-                for (var i = 0; i < length; ++i)
-                {
-                    previousMask = BitVector32.CreateMask(previousMask);
-                    builder.Add(previousMask);
-                }
-
-                s_filterMasks = builder.ToImmutableAndFree();
-
-                s_expanderMask = BitVector32.CreateMask(previousMask);
-            }
-
-            public FilterSet(int data = 0)
-            {
-                _vector = new BitVector32(data);
-            }
-
-            public (ImmutableArray<AsyncCompletionData.CompletionFilter> filters, int data) GetFiltersAndAddToSet(RoslynCompletionItem item)
-            {
-                var listBuilder = new ArrayBuilder<AsyncCompletionData.CompletionFilter>();
-                var vectorForSingleItem = new BitVector32();
-
-                if (item.Flags.IsExpanded())
-                {
-                    listBuilder.Add(Expander);
-                    vectorForSingleItem[s_expanderMask] = _vector[s_expanderMask] = true;
-                }
-
-                for (var i = 0; i < Filters.Length; ++i)
-                {
-                    var filter = Filters[i];
-                    if (filter.Matches(item))
-                    {
-                        listBuilder.Add(GetFilter(filter));
-
-                        var filterMask = s_filterMasks[i];
-                        vectorForSingleItem[filterMask] = _vector[filterMask] = true;
-                    }
-                }
-
-                return (listBuilder.ToImmutableAndFree(), vectorForSingleItem.Data);
-            }
-
-            public void CombineData(int filterSetData)
-            {
-                _vector[filterSetData] = true;
-            }
-
-            public ImmutableArray<AsyncCompletionData.CompletionFilterWithState> GetFilterStatesInSet(bool addUnselectedExpander)
-            {
-                var listBuilder = new ArrayBuilder<AsyncCompletionData.CompletionFilterWithState>();
-
-                // An unselected expander is only added if `addUnselectedExpander == true` and the expander is not in the set.
-                if (_vector[s_expanderMask])
-                {
-                    listBuilder.Add(new AsyncCompletionData.CompletionFilterWithState(Expander, isAvailable: true, isSelected: true));
-                }
-                else if (addUnselectedExpander)
-                {
-                    listBuilder.Add(new AsyncCompletionData.CompletionFilterWithState(Expander, isAvailable: true, isSelected: false));
-                }
-
-                for (var i = 0; i < Filters.Length; ++i)
-                {
-                    if (_vector[s_filterMasks[i]])
-                    {
-                        var vsFilter = GetFilter(Filters[i]);
-                        listBuilder.Add(new AsyncCompletionData.CompletionFilterWithState(vsFilter, isAvailable: true, isSelected: false));
-                    }
-                }
-
-                return listBuilder.ToImmutableAndFree();
-            }
-
-            private static AsyncCompletionData.CompletionFilter GetFilter(CompletionItemFilter roslynFilter)
-            {
-                if (!s_filterCache.TryGetValue(roslynFilter.DisplayText, out var vsFilter))
-                {
-                    var imageId = roslynFilter.Tags.GetFirstGlyph().GetImageId();
-                    vsFilter = new AsyncCompletionData.CompletionFilter(
-                        roslynFilter.DisplayText,
-                        roslynFilter.AccessKey.ToString(),
-                        new ImageElement(new ImageId(imageId.Guid, imageId.Id), EditorFeaturesResources.Filter_image_element));
-                    s_filterCache[roslynFilter.DisplayText] = vsFilter;
-                }
-
-                return vsFilter;
-            }
         }
     }
 }

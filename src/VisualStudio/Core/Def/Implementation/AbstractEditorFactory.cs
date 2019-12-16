@@ -70,10 +70,7 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation
             pguidCmdUI = Guid.Empty;
             pgrfCDW = 0;
 
-            var physicalView = pszPhysicalView == null
-                ? "Code"
-                : pszPhysicalView;
-
+            var physicalView = pszPhysicalView ?? "Code";
             IVsTextBuffer? textBuffer = null;
 
             // Is this document already open? If so, let's see if it's a IVsTextBuffer we should re-use. This allows us
@@ -132,13 +129,12 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation
 
                     // We must create the WinForms designer here
                     var loaderName = GetWinFormsLoaderName(vsHierarchy);
-                    if (loaderName is null)
+                    var designerService = (IVSMDDesignerService)_oleServiceProvider.QueryService<SVSMDDesignerService>();
+                    var designerLoader = (IVSMDDesignerLoader)designerService.CreateDesignerLoader(loaderName);
+                    if (designerLoader is null)
                     {
                         goto case "Code";
                     }
-
-                    var designerService = (IVSMDDesignerService)_oleServiceProvider.QueryService<SVSMDDesignerService>();
-                    var designerLoader = (IVSMDDesignerLoader)designerService.CreateDesignerLoader(loaderName);
 
                     try
                     {
@@ -195,28 +191,14 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation
             try
             {
                 var frameworkName = new FrameworkName(targetFrameworkMoniker);
-
-                if (frameworkName.Identifier == ".NETCoreApp" &&
-                    frameworkName.Version?.Major >= 3)
+                if (frameworkName.Identifier == ".NETCoreApp" && frameworkName.Version?.Major >= 3)
                 {
-                    if (!(_oleServiceProvider.QueryService<SVsShell>() is IVsShell shell))
-                    {
-                        return null;
-                    }
-
-                    var newWinFormsDesignerPackage = new Guid("c78ca057-cc29-421f-ad6d-3b0943debdfc");
-                    if (!ErrorHandler.Succeeded(shell.IsPackageInstalled(newWinFormsDesignerPackage, out var installed))
-                        || installed == 0)
-                    {
-                        return null;
-                    }
-
                     return NewLoaderName;
                 }
             }
             catch
             {
-                // Fall back to the old loader name if there are any failures 
+                // Fall back to the old loader name if there are any failures
                 // while parsing the TFM.
             }
 
@@ -337,11 +319,9 @@ namespace Microsoft.VisualStudio.LanguageServices.Implementation
 
             IOUtilities.PerformIO(() =>
             {
-                using (var textWriter = new StreamWriter(filePath, append: false, encoding: formattedText.Encoding))
-                {
-                    // We pass null here for cancellation, since cancelling in the middle of the file write would leave the file corrupted
-                    formattedText.Write(textWriter, cancellationToken: CancellationToken.None);
-                }
+                using var textWriter = new StreamWriter(filePath, append: false, encoding: formattedText.Encoding);
+                // We pass null here for cancellation, since cancelling in the middle of the file write would leave the file corrupted
+                formattedText.Write(textWriter, cancellationToken: CancellationToken.None);
             });
         }
     }

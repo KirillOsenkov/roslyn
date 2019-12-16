@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pt-BR" original="../ServicesVSResources.resx">
     <body>
+      <trans-unit id="A_new_editorconfig_file_was_detected_at_the_root_of_your_solution_Would_you_like_to_make_it_a_solution_item">
+        <source>A new .editorconfig file was detected at the root of your solution. Would you like to make it a solution item?</source>
+        <target state="translated">Um novo arquivo .editorconfig foi detectado na raiz da sua solução. Deseja torná-lo um item de solução?</target>
+        <note />
+      </trans-unit>
       <trans-unit id="A_new_namespace_will_be_created">
         <source>A new namespace will be created</source>
         <target state="translated">Um namespace será criado</target>
@@ -75,6 +80,16 @@
       <trans-unit id="Colorize_regular_expressions">
         <source>Colorize regular expressions</source>
         <target state="translated">Colorir expressões regulares</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Containing_member">
+        <source>Containing Member</source>
+        <target state="translated">Contendo Membro</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Containing_type">
+        <source>Containing Type</source>
+        <target state="translated">Contendo Tipo</target>
         <note />
       </trans-unit>
       <trans-unit id="Element_is_not_valid">
@@ -312,6 +327,11 @@
         <target state="translated">Parâmetro de Tipo</target>
         <note>This string can be found under "Tools | Options | Text Editor | Basic | Code Style | Naming | Manage Specifications | + | Symbol kinds". All of the "NamingSpecification_VisualBasic_*" strings represent language constructs, and some of them are also actual keywords (NOT this one). Refers to the Visual Basic language concept of a "type parameter".</note>
       </trans-unit>
+      <trans-unit id="Naming_rules">
+        <source>Naming rules</source>
+        <target state="translated">Regras de nomenclatura</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Never_if_unnecessary">
         <source>Never if unnecessary</source>
         <target state="translated">Nunca se desnecessário</target>
@@ -465,6 +485,11 @@
       <trans-unit id="Unused_value_is_explicitly_assigned_to_discard">
         <source>Unused value is explicitly assigned to discard</source>
         <target state="translated">O valor não utilizado é explicitamente atribuído ao descarte</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Updating_severity">
+        <source>Updating severity</source>
+        <target state="translated">Atualizando a severidade</target>
         <note />
       </trans-unit>
       <trans-unit id="Use_editorconfig_compatibility_mode">
@@ -1094,31 +1119,6 @@ Use a lista suspensa para exibir e mudar entre outros projetos aos quais este ar
         <target state="translated">O assembly do analisador '{0}' depende do '{1}', mas não foi encontrado. Os analisadores podem não ser executados corretamente a menos que o assembly ausente também seja adicionado como uma referência do analisador.</target>
         <note />
       </trans-unit>
-      <trans-unit id="Suppression_State">
-        <source>Suppression State</source>
-        <target state="translated">Estado de Supressão</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Active">
-        <source>Active</source>
-        <target state="translated">Ativo</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Suppressed">
-        <source>Suppressed</source>
-        <target state="translated">Suprimido</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="NotApplicable">
-        <source>N/A</source>
-        <target state="translated">N/D</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SuppressionNotSupportedToolTip">
-        <source>Suppression state is supported only for intellisense diagnostics, which are for the current solution snapshot. Switch to 'Intellisense' diagnostics for suppression.</source>
-        <target state="translated">O estado de supressão tem suporte somente para diagnósticos de IntelliSense, voltados para o instantâneo da solução atual. Alterne para diagnóstico 'Intellisense' para supressão.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Suppress_diagnostics">
         <source>Suppress diagnostics</source>
         <target state="translated">Suprimir diagnósticos</target>
@@ -1151,7 +1151,7 @@ Use a lista suspensa para exibir e mudar entre outros projetos aos quais este ar
       </trans-unit>
       <trans-unit id="This_workspace_only_supports_opening_documents_on_the_UI_thread">
         <source>This workspace only supports opening documents on the UI thread.</source>
-        <target state="translated">Este workspace só dá suporte à abertura de documentos no thread da interface do usuário.</target>
+        <target state="translated">Este workspace só dá suporte à abertura de documentos no thread da IU.</target>
         <note />
       </trans-unit>
       <trans-unit id="This_workspace_does_not_support_updating_Visual_Basic_parse_options">
@@ -1655,7 +1655,7 @@ Informações adicionais: {1}</target>
       </trans-unit>
       <trans-unit id="Prefer_null_propagation">
         <source>Prefer null propagation</source>
-        <target state="translated">Preferir propagação nula</target>
+        <target state="translated">Preferir tratamento simplificado de nulo</target>
         <note />
       </trans-unit>
       <trans-unit id="Prefer_explicit_tuple_name">

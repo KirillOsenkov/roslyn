@@ -2,13 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Editor.UnitTests.Utilities;
 using Microsoft.CodeAnalysis.Editor.UnitTests.Workspaces;
-using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Notification;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
@@ -32,8 +30,8 @@ namespace Microsoft.CodeAnalysis.Editor.UnitTests.SolutionCrawler
         {
             using var workspace = new WorkCoordinatorWorkspace(SolutionCrawler);
             var registrationService = new SolutionCrawlerRegistrationService(
-SpecializedCollections.EmptyEnumerable<Lazy<IIncrementalAnalyzerProvider, IncrementalAnalyzerProviderMetadata>>(),
-AsynchronousOperationListenerProvider.NullProvider);
+                SpecializedCollections.EmptyEnumerable<Lazy<IIncrementalAnalyzerProvider, IncrementalAnalyzerProviderMetadata>>(),
+                AsynchronousOperationListenerProvider.NullProvider);
 
             // register and unregister workspace to the service
             registrationService.Register(workspace);
@@ -440,30 +438,28 @@ AsynchronousOperationListenerProvider.NullProvider);
         [Fact]
         public async Task Document_AnalyzerConfigFileChange()
         {
-            using (var workspace = new WorkCoordinatorWorkspace(SolutionCrawler))
-            {
-                var solution = GetInitialSolutionInfo_2Projects_10Documents(workspace);
-                workspace.OnSolutionAdded(solution);
-                await WaitWaiterAsync(workspace.ExportProvider);
+            using var workspace = new WorkCoordinatorWorkspace(SolutionCrawler);
+            var solution = GetInitialSolutionInfo_2Projects_10Documents(workspace);
+            workspace.OnSolutionAdded(solution);
+            await WaitWaiterAsync(workspace.ExportProvider);
 
-                var project = solution.Projects[0];
-                var analyzerConfigDocFilePath = PathUtilities.CombineAbsoluteAndRelativePaths(Temp.CreateDirectory().Path, ".editorconfig");
-                var analyzerConfigFile = DocumentInfo.Create(DocumentId.CreateNewId(project.Id), ".editorconfig", filePath: analyzerConfigDocFilePath);
+            var project = solution.Projects[0];
+            var analyzerConfigDocFilePath = PathUtilities.CombineAbsoluteAndRelativePaths(Temp.CreateDirectory().Path, ".editorconfig");
+            var analyzerConfigFile = DocumentInfo.Create(DocumentId.CreateNewId(project.Id), ".editorconfig", filePath: analyzerConfigDocFilePath);
 
-                var worker = await ExecuteOperation(workspace, w => w.OnAnalyzerConfigDocumentAdded(analyzerConfigFile));
-                Assert.Equal(5, worker.SyntaxDocumentIds.Count);
-                Assert.Equal(5, worker.DocumentIds.Count);
+            var worker = await ExecuteOperation(workspace, w => w.OnAnalyzerConfigDocumentAdded(analyzerConfigFile));
+            Assert.Equal(5, worker.SyntaxDocumentIds.Count);
+            Assert.Equal(5, worker.DocumentIds.Count);
 
-                worker = await ExecuteOperation(workspace, w => w.ChangeAnalyzerConfigDocument(analyzerConfigFile.Id, SourceText.From("//")));
+            worker = await ExecuteOperation(workspace, w => w.ChangeAnalyzerConfigDocument(analyzerConfigFile.Id, SourceText.From("//")));
 
-                Assert.Equal(5, worker.SyntaxDocumentIds.Count);
-                Assert.Equal(5, worker.DocumentIds.Count);
+            Assert.Equal(5, worker.SyntaxDocumentIds.Count);
+            Assert.Equal(5, worker.DocumentIds.Count);
 
-                worker = await ExecuteOperation(workspace, w => w.OnAnalyzerConfigDocumentRemoved(analyzerConfigFile.Id));
+            worker = await ExecuteOperation(workspace, w => w.OnAnalyzerConfigDocumentRemoved(analyzerConfigFile.Id));
 
-                Assert.Equal(5, worker.SyntaxDocumentIds.Count);
-                Assert.Equal(5, worker.DocumentIds.Count);
-            }
+            Assert.Equal(5, worker.SyntaxDocumentIds.Count);
+            Assert.Equal(5, worker.DocumentIds.Count);
         }
 
         [Fact, WorkItem(670335, "http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/670335")]
@@ -841,7 +837,7 @@ End Class";
                 {
                     started = true;
                 }
-                else if (s.Status == ProgressStatus.Stoped)
+                else if (s.Status == ProgressStatus.Stopped)
                 {
                     stopped = true;
                 }
@@ -966,6 +962,8 @@ End Class";
             using var workspace = TestWorkspace.Create(
                 SolutionCrawler, language, compilationOptions: null, parseOptions: null, content: code, exportProvider: EditorServicesUtil.ExportProvider);
             SetOptions(workspace);
+            var testDocument = workspace.Documents.First();
+            var textBuffer = testDocument.GetTextBuffer();
 
             var analyzer = new Analyzer();
             var lazyWorker = new Lazy<IIncrementalAnalyzerProvider, IncrementalAnalyzerProviderMetadata>(() => new AnalyzerProvider(analyzer), Metadata.Crawler);
@@ -973,10 +971,7 @@ End Class";
 
             service.Register(workspace);
 
-            var testDocument = workspace.Documents.First();
-
             var insertPosition = testDocument.CursorPosition;
-            var textBuffer = testDocument.GetTextBuffer();
 
             using (var edit = textBuffer.CreateEdit())
             {

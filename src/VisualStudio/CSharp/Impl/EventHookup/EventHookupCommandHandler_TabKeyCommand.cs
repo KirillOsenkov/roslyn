@@ -23,7 +23,6 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
 using Roslyn.Utilities;
-using VSCommanding = Microsoft.VisualStudio.Commanding;
 
 namespace Microsoft.CodeAnalysis.Editor.CSharp.EventHookup
 {
@@ -48,12 +47,12 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.EventHookup
             HandleTabWorker(args.TextView, args.SubjectBuffer, nextHandler, CancellationToken.None);
         }
 
-        public VSCommanding.CommandState GetCommandState(TabKeyCommandArgs args, Func<VSCommanding.CommandState> nextHandler)
+        public CommandState GetCommandState(TabKeyCommandArgs args, Func<CommandState> nextHandler)
         {
             AssertIsForeground();
             if (EventHookupSessionManager.CurrentSession != null)
             {
-                return VSCommanding.CommandState.Available;
+                return CommandState.Available;
             }
             else
             {
@@ -278,7 +277,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.EventHookup
                 typeParameters: default,
                 parameters: delegateInvokeMethod.Parameters,
                 statements: ImmutableArray.Create(
-                    CodeGenerationHelpers.GenerateThrowStatement(syntaxFactory, semanticDocument, "System.NotImplementedException", cancellationToken)));
+                    CodeGenerationHelpers.GenerateThrowStatement(syntaxFactory, semanticDocument, "System.NotImplementedException")));
         }
 
         private void BeginInlineRename(Workspace workspace, ITextView textView, ITextBuffer subjectBuffer, int plusEqualTokenEndPosition, CancellationToken cancellationToken)

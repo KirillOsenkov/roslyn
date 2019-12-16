@@ -4,8 +4,8 @@ using Microsoft.CodeAnalysis.Completion;
 using Microsoft.VisualStudio.Text;
 using EditorAsyncCompletion = Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion;
 using EditorAsyncCompletionData = Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data;
-using RoslynTrigger = Microsoft.CodeAnalysis.Completion.CompletionTrigger;
 using RoslynCompletionItem = Microsoft.CodeAnalysis.Completion.CompletionItem;
+using RoslynTrigger = Microsoft.CodeAnalysis.Completion.CompletionTrigger;
 using VSCompletionItem = Microsoft.VisualStudio.Language.Intellisense.AsyncCompletion.Data.CompletionItem;
 
 namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncCompletion
@@ -125,14 +125,27 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.IntelliSense.AsyncComplet
             initialTriggerLocation = default;
             return false;
         }
-        
-        // This is a temporarily method to support preference of IntelliCode items comparing to non-IntelliCode items.
-        // We expect that Editor will intorduce this support and we will get rid of relying on the "★" then.
-        internal static bool IsPreferredItem(this RoslynCompletionItem completionItem)
-            => completionItem.DisplayText.StartsWith("★");
+
+        internal static bool TryGetInitialTriggerLocation(VSCompletionItem item, out SnapshotPoint initialTriggerLocation)
+        {
+            if (item.Properties.TryGetProperty(CompletionSource.TriggerLocation, out initialTriggerLocation))
+            {
+                return true;
+            }
+
+            initialTriggerLocation = default;
+            return false;
+        }
 
         // This is a temporarily method to support preference of IntelliCode items comparing to non-IntelliCode items.
-        // We expect that Editor will intorduce this support and we will get rid of relying on the "★" then.
+        // We expect that Editor will introduce this support and we will get rid of relying on the "★" then.
+        // We check both the display text and the display text prefix to account for IntelliCode item providers
+        // that may be using the prefix to include the ★.
+        internal static bool IsPreferredItem(this RoslynCompletionItem completionItem)
+            => completionItem.DisplayText.StartsWith("★") || completionItem.DisplayTextPrefix.StartsWith("★");
+
+        // This is a temporarily method to support preference of IntelliCode items comparing to non-IntelliCode items.
+        // We expect that Editor will introduce this support and we will get rid of relying on the "★" then.
         internal static bool IsPreferredItem(this VSCompletionItem completionItem)
             => completionItem.DisplayText.StartsWith("★");
     }

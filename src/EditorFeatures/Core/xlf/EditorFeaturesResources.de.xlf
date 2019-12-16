@@ -62,6 +62,11 @@
         <target state="translated">Bei der Dokumentformatierung wurde eine zusätzliche Bereinigung durchgeführt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Go_To_Base">
+        <source>Go To Base</source>
+        <target state="translated">Zu Basis wechseln</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Invalid_assembly_name">
         <source>Invalid assembly name</source>
         <target state="translated">Ungültiger Assemblyname.</target>
@@ -75,6 +80,11 @@
       <trans-unit id="Keyword_Control">
         <source>Keyword - Control</source>
         <target state="translated">Schlüsselwort – Steuerung</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Locating_bases">
+        <source>Locating bases...</source>
+        <target state="translated">Basen werden gesucht...</target>
         <note />
       </trans-unit>
       <trans-unit id="Operator_Overloaded">
@@ -349,7 +359,7 @@
       </trans-unit>
       <trans-unit id="Rude_Edit">
         <source>Rude Edit</source>
-        <target state="translated">Grobe Bearbeitung</target>
+        <target state="translated">Nicht unterstützte Bearbeitung</target>
         <note />
       </trans-unit>
       <trans-unit id="Rename_will_update_1_reference_in_1_file">
@@ -914,7 +924,7 @@
       </trans-unit>
       <trans-unit id="Engine_must_be_attached_to_an_Interactive_Window">
         <source>Engine must be attached to an Interactive Window.</source>
-        <target state="translated">Engine muss an das interaktive Fenster angefügt werden.</target>
+        <target state="translated">Engine muss an das Interactive-Fenster angefügt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="Changes_the_current_prompt_settings">

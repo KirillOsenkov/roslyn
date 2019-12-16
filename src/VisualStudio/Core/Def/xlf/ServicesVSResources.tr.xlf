@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="../ServicesVSResources.resx">
     <body>
+      <trans-unit id="A_new_editorconfig_file_was_detected_at_the_root_of_your_solution_Would_you_like_to_make_it_a_solution_item">
+        <source>A new .editorconfig file was detected at the root of your solution. Would you like to make it a solution item?</source>
+        <target state="translated">Çözümünüzün kökünde yeni bir .editorconfig dosyası algılandı. Bunu bir çözüm öğesi yapmak istiyor musunuz?</target>
+        <note />
+      </trans-unit>
       <trans-unit id="A_new_namespace_will_be_created">
         <source>A new namespace will be created</source>
         <target state="translated">Yeni bir ad alanı oluşturulacak</target>
@@ -75,6 +80,16 @@
       <trans-unit id="Colorize_regular_expressions">
         <source>Colorize regular expressions</source>
         <target state="translated">Normal ifadeleri renklendir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Containing_member">
+        <source>Containing Member</source>
+        <target state="translated">Kapsayan Üye</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Containing_type">
+        <source>Containing Type</source>
+        <target state="translated">Kapsayan Tür</target>
         <note />
       </trans-unit>
       <trans-unit id="Element_is_not_valid">
@@ -312,6 +327,11 @@
         <target state="translated">Tür Parametresi</target>
         <note>This string can be found under "Tools | Options | Text Editor | Basic | Code Style | Naming | Manage Specifications | + | Symbol kinds". All of the "NamingSpecification_VisualBasic_*" strings represent language constructs, and some of them are also actual keywords (NOT this one). Refers to the Visual Basic language concept of a "type parameter".</note>
       </trans-unit>
+      <trans-unit id="Naming_rules">
+        <source>Naming rules</source>
+        <target state="translated">Adlandırma kuralları</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Never_if_unnecessary">
         <source>Never if unnecessary</source>
         <target state="translated">Gereksizse hiçbir zaman</target>
@@ -465,6 +485,11 @@
       <trans-unit id="Unused_value_is_explicitly_assigned_to_discard">
         <source>Unused value is explicitly assigned to discard</source>
         <target state="translated">Kullanılmayan değer açıkça atılmak üzere atandı</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Updating_severity">
+        <source>Updating severity</source>
+        <target state="translated">Önem derecesi güncelleştiriliyor</target>
         <note />
       </trans-unit>
       <trans-unit id="Use_editorconfig_compatibility_mode">
@@ -1094,31 +1119,6 @@ Bu dosyanın ait olabileceği diğer projeleri görüntülemek ve bunlara geçi�
         <target state="translated">Çözümleyici bütünleştirilmiş kodu '{0}', '{1}' öğesine bağımlı ancak bu öğe bulunamadı. Eksik bütünleştirilmiş kod da çözümleyici başvurusu olarak eklenmeden, çözümleyiciler düzgün şekilde çalışmayabilir.</target>
         <note />
       </trans-unit>
-      <trans-unit id="Suppression_State">
-        <source>Suppression State</source>
-        <target state="translated">Gizleme Durumu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Active">
-        <source>Active</source>
-        <target state="translated">Etkin</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="Suppressed">
-        <source>Suppressed</source>
-        <target state="translated">Gizlendi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="NotApplicable">
-        <source>N/A</source>
-        <target state="translated">Yok</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SuppressionNotSupportedToolTip">
-        <source>Suppression state is supported only for intellisense diagnostics, which are for the current solution snapshot. Switch to 'Intellisense' diagnostics for suppression.</source>
-        <target state="translated">Gizleme durumu yalnızca, geçerli çözümün anlık görüntüsüne yönelik olan IntelliSense tanılaması için desteklenir. Gizleme için 'Intellisense' tanılamasına geçiş yapın.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Suppress_diagnostics">
         <source>Suppress diagnostics</source>
         <target state="translated">Tanılamayı gizle</target>
@@ -1565,7 +1565,7 @@ Ek bilgiler: {1}</target>
       </trans-unit>
       <trans-unit id="Prefer_inlined_variable_declaration">
         <source>Prefer inlined variable declaration</source>
-        <target state="translated">Satır içi değişken bildirimini tercih et</target>
+        <target state="translated">Satır içine alınmış değişken bildirimini tercih et</target>
         <note />
       </trans-unit>
       <trans-unit id="Use_expression_body_for_methods">

@@ -13,16 +13,15 @@ using Microsoft.VisualStudio.Commanding;
 using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
 using Microsoft.VisualStudio.Utilities;
 using Roslyn.Utilities;
-using VSCommanding = Microsoft.VisualStudio.Commanding;
 
 namespace Microsoft.CodeAnalysis.Editor.Implementation.CallHierarchy
 {
-    [Export(typeof(VSCommanding.ICommandHandler))]
+    [Export(typeof(ICommandHandler))]
     [ContentType(ContentTypeNames.CSharpContentType)]
     [ContentType(ContentTypeNames.VisualBasicContentType)]
     [Name("CallHierarchy")]
     [Order(After = PredefinedCommandHandlerNames.DocumentationComments)]
-    internal class CallHierarchyCommandHandler : VSCommanding.ICommandHandler<ViewCallHierarchyCommandArgs>
+    internal class CallHierarchyCommandHandler : ICommandHandler<ViewCallHierarchyCommandArgs>
     {
         private readonly IThreadingContext _threadingContext;
         private readonly ICallHierarchyPresenter _presenter;
@@ -72,26 +71,27 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.CallHierarchy
                         if (node != null)
                         {
                             _presenter.PresentRoot((CallHierarchyItem)node);
+                            return true;
                         }
                     }
                 }
-                else
-                {
-                    // We are about to show a modal UI dialog so we should take over the command execution
-                    // wait context. That means the command system won't attempt to show its own wait dialog 
-                    // and also will take it into consideration when measuring command handling duration.
-                    waitScope.Context.TakeOwnership();
-                    var notificationService = document.Project.Solution.Workspace.Services.GetService<INotificationService>();
-                    notificationService.SendNotification(EditorFeaturesResources.Cursor_must_be_on_a_member_name, severity: NotificationSeverity.Information);
-                }
+
+                // Haven't found suitable hierarchy -> caret wasn't on symbol that can have call hierarchy.
+                //
+                // We are about to show a modal UI dialog so we should take over the command execution
+                // wait context. That means the command system won't attempt to show its own wait dialog 
+                // and also will take it into consideration when measuring command handling duration.
+                waitScope.Context.TakeOwnership();
+                var notificationService = document.Project.Solution.Workspace.Services.GetService<INotificationService>();
+                notificationService.SendNotification(EditorFeaturesResources.Cursor_must_be_on_a_member_name, severity: NotificationSeverity.Information);
             }
 
             return true;
         }
 
-        public VSCommanding.CommandState GetCommandState(ViewCallHierarchyCommandArgs args)
+        public CommandState GetCommandState(ViewCallHierarchyCommandArgs args)
         {
-            return VSCommanding.CommandState.Available;
+            return CommandState.Available;
         }
     }
 }

@@ -55,7 +55,6 @@ namespace System.Runtime.CompilerServices
 namespace System.Runtime.CompilerServices
 {
     [System.AttributeUsage(
-        AttributeTargets.Module |
         AttributeTargets.Class |
         AttributeTargets.Delegate |
         AttributeTargets.Interface |
@@ -171,13 +170,23 @@ namespace System.Diagnostics.CodeAnalysis
 }
 ";
 
-        protected const string NotNullIfNotNulltAttributeDefinition = @"
+        protected const string NotNullIfNotNullAttributeDefinition = @"
 namespace System.Diagnostics.CodeAnalysis
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.ReturnValue, AllowMultiple = true, Inherited = false)]
     public sealed class NotNullIfNotNullAttribute : Attribute
     {
         public NotNullIfNotNullAttribute(string parameterName) { }
+    }
+}
+";
+
+        protected const string IAsyncDisposableDefinition = @"
+namespace System
+{
+    public interface IAsyncDisposable
+    {
+       System.Threading.Tasks.ValueTask DisposeAsync();
     }
 }
 ";

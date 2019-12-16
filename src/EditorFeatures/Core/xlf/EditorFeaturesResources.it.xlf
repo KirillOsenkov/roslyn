@@ -62,6 +62,11 @@
         <target state="translated">Formatta documento ha eseguito una pulizia aggiuntiva</target>
         <note />
       </trans-unit>
+      <trans-unit id="Go_To_Base">
+        <source>Go To Base</source>
+        <target state="translated">Vai a base</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Invalid_assembly_name">
         <source>Invalid assembly name</source>
         <target state="translated">Nome di assembly non valido</target>
@@ -75,6 +80,11 @@
       <trans-unit id="Keyword_Control">
         <source>Keyword - Control</source>
         <target state="translated">Parola chiave - Controllo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Locating_bases">
+        <source>Locating bases...</source>
+        <target state="translated">Individuazione delle basi...</target>
         <note />
       </trans-unit>
       <trans-unit id="Operator_Overloaded">
@@ -349,7 +359,7 @@
       </trans-unit>
       <trans-unit id="Rude_Edit">
         <source>Rude Edit</source>
-        <target state="translated">Modifica non applicabile</target>
+        <target state="translated">Modifica non applicabile al momento</target>
         <note />
       </trans-unit>
       <trans-unit id="Rename_will_update_1_reference_in_1_file">

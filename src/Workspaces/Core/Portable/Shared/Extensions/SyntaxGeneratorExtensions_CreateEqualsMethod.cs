@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
                 expressions.Add(factory.ReferenceNotEqualsExpression(localNameExpression, factory.NullLiteralExpression()));
             }
 
-            if (!containingType.IsValueType && HasExistingBaseEqualsMethod(containingType, cancellationToken))
+            if (!containingType.IsValueType && HasExistingBaseEqualsMethod(containingType))
             {
                 // If we're overriding something that also provided an overridden 'Equals',
                 // then ensure the base type thinks it is equals as well.
@@ -208,12 +208,8 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
 
                 var memberType = member.GetSymbolType();
 
-                if (IsPrimitiveValueType(memberType))
+                if (ShouldUseEqualityOperator(memberType))
                 {
-                    // If we have one of the well known primitive types, then just use '==' to compare
-                    // the values.
-                    //
-                    //      this.a == other.a
                     expressions.Add(factory.ValueEqualsExpression(thisSymbol, otherSymbol));
                     continue;
                 }
@@ -221,8 +217,8 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
                 var valueIEquatable = memberType?.IsValueType == true && ImplementsIEquatable(memberType, iequatableType);
                 if (valueIEquatable || memberType?.IsTupleType == true)
                 {
-                    // If it's a value type and implements IEquatable<T>, Or if it's a tuple, then 
-                    // just call directly into .Equals. This keeps the code simple and avoids an 
+                    // If it's a value type and implements IEquatable<T>, Or if it's a tuple, then
+                    // just call directly into .Equals. This keeps the code simple and avoids an
                     // unnecessary null check.
                     //
                     //      this.a.Equals(other.a)
@@ -266,7 +262,7 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
                 //
                 //      other != null
                 expressions.Add(factory.ReferenceNotEqualsExpression(otherNameExpression, factory.NullLiteralExpression()));
-                if (HasExistingBaseEqualsMethod(containingType, cancellationToken))
+                if (HasExistingBaseEqualsMethod(containingType))
                 {
                     // If we're overriding something that also provided an overridden 'Equals',
                     // then ensure the base type thinks it is equals as well.
@@ -325,10 +321,15 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
             return false;
         }
 
-        private static bool IsPrimitiveValueType(ITypeSymbol typeSymbol)
+        private static bool ShouldUseEqualityOperator(ITypeSymbol typeSymbol)
         {
             if (typeSymbol != null)
             {
+                if (typeSymbol.IsNullable(out var underlyingType))
+                {
+                    typeSymbol = underlyingType;
+                }
+
                 if (typeSymbol.IsEnumType())
                 {
                     return true;
@@ -350,7 +351,6 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
                     case SpecialType.System_Single:
                     case SpecialType.System_Double:
                     case SpecialType.System_String:
-                    case SpecialType.System_Nullable_T:
                     case SpecialType.System_DateTime:
                         return true;
                 }
@@ -381,7 +381,7 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions
             }
         }
 
-        private static bool HasExistingBaseEqualsMethod(INamedTypeSymbol containingType, CancellationToken cancellationToken)
+        private static bool HasExistingBaseEqualsMethod(INamedTypeSymbol containingType)
         {
             // Check if any of our base types override Equals.  If so, first check with them.
             var existingMethods =

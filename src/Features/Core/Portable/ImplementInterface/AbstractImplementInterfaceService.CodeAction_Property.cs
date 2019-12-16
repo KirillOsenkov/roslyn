@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.ImplementInterface
                     compilation, property, accessibility, generateAbstractly, useExplicitInterfaceSymbol,
                     propertyGenerationBehavior, attributesToRemove, cancellationToken);
 
-                var syntaxFacts = Document.GetLanguageService<ISyntaxFactsService>();
+                var syntaxFacts = Document.Project.LanguageServices.GetRequiredService<ISyntaxFactsService>();
                 var parameterNames = NameGenerator.EnsureUniqueness(
                     property.Parameters.Select(p => p.Name).ToList(), isCaseSensitive: syntaxFacts.IsCaseSensitive);
 
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.ImplementInterface
                     accessibility: accessibility,
                     explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(property.SetMethod) : default,
                     statements: GetSetAccessorStatements(
-                        compilation, property, generateAbstractly, propertyGenerationBehavior, cancellationToken));
+                        compilation, property, generateAbstractly, propertyGenerationBehavior));
             }
 
             private IMethodSymbol? GenerateGetAccessor(
@@ -131,22 +131,21 @@ namespace Microsoft.CodeAnalysis.ImplementInterface
                     accessibility: accessibility,
                     explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(property.GetMethod) : default,
                     statements: GetGetAccessorStatements(
-                        compilation, property, generateAbstractly, propertyGenerationBehavior, cancellationToken));
+                        compilation, property, generateAbstractly, propertyGenerationBehavior));
             }
 
             private ImmutableArray<SyntaxNode> GetSetAccessorStatements(
                 Compilation compilation,
                 IPropertySymbol property,
                 bool generateAbstractly,
-                ImplementTypePropertyGenerationBehavior propertyGenerationBehavior,
-                CancellationToken cancellationToken)
+                ImplementTypePropertyGenerationBehavior propertyGenerationBehavior)
             {
                 if (generateAbstractly)
                 {
                     return default;
                 }
 
-                var factory = Document.GetLanguageService<SyntaxGenerator>();
+                var factory = Document.Project.LanguageServices.GetRequiredService<SyntaxGenerator>();
                 if (ThroughMember != null)
                 {
                     var throughExpression = CreateThroughExpression(factory);
@@ -182,15 +181,14 @@ namespace Microsoft.CodeAnalysis.ImplementInterface
                 Compilation compilation,
                 IPropertySymbol property,
                 bool generateAbstractly,
-                ImplementTypePropertyGenerationBehavior propertyGenerationBehavior,
-                CancellationToken cancellationToken)
+                ImplementTypePropertyGenerationBehavior propertyGenerationBehavior)
             {
                 if (generateAbstractly)
                 {
                     return default;
                 }
 
-                var factory = Document.GetLanguageService<SyntaxGenerator>();
+                var factory = Document.Project.LanguageServices.GetRequiredService<SyntaxGenerator>();
                 if (ThroughMember != null)
                 {
                     var throughExpression = CreateThroughExpression(factory);
