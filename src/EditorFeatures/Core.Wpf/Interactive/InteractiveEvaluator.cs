@@ -629,10 +629,7 @@ namespace Microsoft.CodeAnalysis.Editor.Interactive
 
         public string GetPrompt()
         {
-            var buffer = GetCurrentWindowOrThrow().CurrentLanguageBuffer;
-            return buffer != null && buffer.CurrentSnapshot.LineCount > 1
-                ? ". "
-                : "> ";
+            return "";
         }
 
         #endregion
