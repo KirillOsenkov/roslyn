@@ -13,6 +13,7 @@
     <AssemblyNameNet13 Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" />
     <AssemblyNameNet13 Include="Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes" />
     <AssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures.Wpf" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Features" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
@@ -53,6 +54,11 @@
     <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures\Release\net472\Microsoft.CodeAnalysis.FlowAnalysis.Utilities.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.Elfie.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe.config" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\CSharpInteractive.rsp" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe.config" />
   </ItemGroup>
 
   <Target Name="Build">
