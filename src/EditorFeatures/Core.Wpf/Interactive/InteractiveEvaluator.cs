@@ -473,8 +473,10 @@ namespace Microsoft.CodeAnalysis.Editor.Interactive
         private static string GetDesktopHostDirectory()
             => Path.Combine(Path.GetDirectoryName(typeof(InteractiveEvaluator).Assembly.Location), "DesktopHost");
 
+        public InteractiveHostOptions HostOptions { get; set; }
+
         public InteractiveHostOptions GetHostOptions(bool initialize, bool? is64bit)
-            => new InteractiveHostOptions(
+            => HostOptions ?? new InteractiveHostOptions(
                  hostDirectory: _interactiveHost.OptionsOpt?.HostDirectory ?? GetDesktopHostDirectory(),
                  initializationFile: initialize ? _responseFilePath : null,
                  culture: CultureInfo.CurrentUICulture,
@@ -624,10 +626,7 @@ namespace Microsoft.CodeAnalysis.Editor.Interactive
 
         public string GetPrompt()
         {
-            var buffer = GetCurrentWindowOrThrow().CurrentLanguageBuffer;
-            return buffer != null && buffer.CurrentSnapshot.LineCount > 1
-                ? ". "
-                : "> ";
+            return "";
         }
 
         #endregion
