@@ -11,4 +11,4 @@ if %errorlevel% NEQ 0 (
 	exit /b %errorlevel%
 )
 
-call nuget pack roslyn.nuspec -Version 1.0.11
+call nuget pack roslyn.nuspec -Version 1.0.22
