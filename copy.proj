@@ -59,6 +59,8 @@
     <SourceFiles Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\Desktop\CSharpInteractive.rsp" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe.config" />
+    <SourceFiles Include="$(RoslynBinariesBase)\csc\$(Configuration)\net472\System.Collections.Immutable.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\csc\$(Configuration)\net472\System.Reflection.Metadata.dll" />
   </ItemGroup>
 
   <Target Name="Build">
