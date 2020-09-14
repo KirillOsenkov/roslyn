@@ -1,0 +1,70 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+    <RoslynBinariesBase>$(MSBuildThisFileDirectory)artifacts\bin</RoslynBinariesBase>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CodeStyle" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CodeStyle.Fixes" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures.Wpf" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Features" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Wpf" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.Razor" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.InteractiveHost" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.Remote.Razor.ServiceHub" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.Remote.ServiceHub" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Scripting" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle.Fixes" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.EditorFeatures" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.Features" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.Scripting" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Workspaces" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.Workspaces.Desktop" />
+    <AssemblyName Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.CSharp" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Implementation" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Razor.RemoteClient" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.SolutionExplorer" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.VisualBasic" />
+    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceFiles Include="@(AssemblyNameNet20->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).dll')" />
+    <SourceFiles Include="@(AssemblyNameNet20->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).xml')" />
+    <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).dll')" />
+    <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.Elfie.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures\Release\net472\Microsoft.CodeAnalysis.AnalyzerUtilities.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.LanguageServer.Protocol\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.LanguageServer.Protocol\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Extensions.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe.config" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\CSharpInteractive.rsp" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe.config" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(MSBuildThisFileDirectory)artifacts\nuget" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

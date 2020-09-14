@@ -434,8 +434,10 @@ namespace Microsoft.CodeAnalysis.Editor.Interactive
             return ResetCoreAsync(GetHostOptions(initialize, resetOptions.Platform));
         }
 
+        public InteractiveHostOptions HostOptions { get; set; }
+
         public InteractiveHostOptions GetHostOptions(bool initialize, InteractiveHostPlatform? platform)
-            => InteractiveHostOptions.CreateFromDirectory(
+            => HostOptions ?? InteractiveHostOptions.CreateFromDirectory(
                 _hostDirectory,
                 initialize ? _responseFileName : null,
                 CultureInfo.CurrentUICulture,
@@ -552,10 +554,7 @@ namespace Microsoft.CodeAnalysis.Editor.Interactive
 
         public string GetPrompt()
         {
-            var buffer = GetInteractiveWindow().CurrentLanguageBuffer;
-            return buffer != null && buffer.CurrentSnapshot.LineCount > 1
-                ? ". "
-                : "> ";
+            return "";
         }
     }
 }
