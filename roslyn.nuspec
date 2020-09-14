@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Roslyn.Ide</id>
+    <version>1.0.22</version>
+    <authors>Kirill Osenkov</authors>
+    <owners>Kirill Osenkov</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/KirillOsenkov/roslyn</projectUrl>
+    <description>Roslyn binaries with some extra IVT</description>
+    <tags></tags>
+    <repository url="https://github.com/KirillOsenkov/roslyn" />
+  </metadata>
+  <files>
+    <file src="artifacts\nuget\*.*" />
+  </files>
+</package>
