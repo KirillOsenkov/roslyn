@@ -20,6 +20,7 @@
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Wpf" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.Razor" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
     <AssemblyName Include="Microsoft.CodeAnalysis.InteractiveHost" />
     <AssemblyName Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
