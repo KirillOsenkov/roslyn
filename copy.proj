@@ -18,15 +18,15 @@
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures" />
-    <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Wpf" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.Razor" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
-    <AssemblyName Include="Microsoft.CodeAnalysis.InteractiveHost" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.InteractiveHost" />
     <AssemblyName Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
     <AssemblyName Include="Microsoft.CodeAnalysis.Remote.Razor.ServiceHub" />
     <AssemblyName Include="Microsoft.CodeAnalysis.Remote.ServiceHub" />
-    <AssemblyName Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Scripting" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" />
@@ -41,7 +41,6 @@
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices" />
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.CSharp" />
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Implementation" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Razor.RemoteClient" />
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.SolutionExplorer" />
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.VisualBasic" />
     <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Xaml" />
@@ -58,9 +57,9 @@
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.LanguageServer.Protocol\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Extensions.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe.config" />
-    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\CSharpInteractive.rsp" />
-    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe" />
-    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\InteractiveHost64.exe.config" />
+    <SourceFiles Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\Desktop\CSharpInteractive.rsp" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe.config" />
   </ItemGroup>
 
   <Target Name="Build">
