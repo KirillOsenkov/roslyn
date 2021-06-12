@@ -1,0 +1,1 @@
+nuget.exe push -Source https://kirillosenkov.pkgs.visualstudio.com/Public/_packaging/KirillOsenkovNuGet/nuget/v3/index.json -ApiKey AzureDevOps *.nupkg
