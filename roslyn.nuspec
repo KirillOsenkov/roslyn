@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Roslyn.Ide</id>
+    <id>Microsoft.Ide.Internal.Roslyn</id>
     <version>1.0.26</version>
     <authors>Kirill Osenkov</authors>
     <owners>Kirill Osenkov</owners>
