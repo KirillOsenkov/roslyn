@@ -218,7 +218,7 @@ function Process-Arguments() {
 }
 
 function BuildSolution() {
-  $solution = "Roslyn.sln"
+  $solution = "RoslynNoTests.sln"
 
   Write-Host "$($solution):"
 
