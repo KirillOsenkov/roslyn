@@ -23,7 +23,6 @@
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.InteractiveHost" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
-    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.Razor.ServiceHub" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.ServiceHub" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Scripting" />
