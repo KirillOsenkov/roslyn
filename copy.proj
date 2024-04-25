@@ -51,13 +51,13 @@
     <SourceFiles Include="@(AssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.Elfie.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.AnalyzerUtilities.dll" />
-    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.VisualStudio.LanguageServices\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.dll" />
-    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.VisualStudio.LanguageServices\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Extensions.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Extensions.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe.config" />
-    <SourceFiles Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\Desktop\CSharpInteractive.rsp" />
-    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe" />
-    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win10-x64\InteractiveHost64.exe.config" />
+    <SourceFiles Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\x64\Desktop\CSharpInteractive.rsp" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win-x64\InteractiveHost64.exe" />
+    <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win-x64\InteractiveHost64.exe.config" />
   </ItemGroup>
 
   <Target Name="Build">
