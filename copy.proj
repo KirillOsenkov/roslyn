@@ -53,6 +53,7 @@
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.CodeAnalysis.AnalyzerUtilities.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Extensions.dll" />
+    <SourceFiles Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures.Wpf\Release\net472\Microsoft.VisualStudio.LanguageServer.Protocol.Internal.dll" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe" />
     <SourceFiles Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\InteractiveHost32.exe.config" />
     <SourceFiles Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\x64\Desktop\CSharpInteractive.rsp" />
