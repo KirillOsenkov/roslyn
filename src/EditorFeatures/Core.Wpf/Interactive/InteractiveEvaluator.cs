@@ -200,9 +200,11 @@ namespace Microsoft.CodeAnalysis.Interactive
 
             var resetOptions = ResetOptions;
             _session.Host.SetOutputs(window.OutputWriter, window.ErrorOutputWriter);
-            var isSuccessful = await _session.ResetAsync(_session.GetHostOptions(initialize: true, resetOptions.Platform)).ConfigureAwait(false);
+            var isSuccessful = await _session.ResetAsync(HostOptions ?? _session.GetHostOptions(initialize: true, resetOptions.Platform)).ConfigureAwait(false);
             return new ExecutionResult(isSuccessful);
         }
+
+        public InteractiveHostOptions? HostOptions { get; set; }
 
         /// <summary>
         /// Invoked by the reset toolbar button.
@@ -219,7 +221,7 @@ namespace Microsoft.CodeAnalysis.Interactive
             window.WriteLine(EditorFeaturesWpfResources.Resetting_execution_engine);
             window.FlushOutput();
 
-            var options = _session.GetHostOptions(initialize, resetOptions.Platform);
+            var options = HostOptions ?? _session.GetHostOptions(initialize, resetOptions.Platform);
             OnBeforeReset?.Invoke(options.Platform);
             var isSuccessful = await _session.ResetAsync(options).ConfigureAwait(false);
             return new ExecutionResult(isSuccessful);
@@ -277,10 +279,7 @@ namespace Microsoft.CodeAnalysis.Interactive
 
         public string GetPrompt()
         {
-            var buffer = GetInteractiveWindow().CurrentLanguageBuffer;
-            return buffer != null && buffer.CurrentSnapshot.LineCount > 1
-                ? ". "
-                : "> ";
+            return "";
         }
 
         public Task SetPathsAsync(ImmutableArray<string> referenceSearchPaths, ImmutableArray<string> sourceSearchPaths, string workingDirectory)
