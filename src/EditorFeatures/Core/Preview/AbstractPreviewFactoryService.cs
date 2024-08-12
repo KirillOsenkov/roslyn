@@ -647,8 +647,11 @@ internal abstract class AbstractPreviewFactoryService<TDifferenceViewer>(
 
         var buffer = _textBufferFactoryService.CreateTextBuffer(text.ToString(), contentType);
 
-        // Associate buffer with a text document with random file path to satisfy extensibility points expecting absolute file path.
-        _textDocumentFactoryService.CreateTextDocument(buffer, Path.GetTempFileName());
+        // Associate buffer with a text document with random file path to satisfy extensibility points expecting
+        // absolute file path.  Ensure the new path preserves the same extension as before as that extension is used by
+        // LSP to determine the language of the document.
+        _textDocumentFactoryService.CreateTextDocument(
+            buffer, Path.GetTempFileName() + Path.GetExtension(document.FilePath));
 
         return buffer;
     }
