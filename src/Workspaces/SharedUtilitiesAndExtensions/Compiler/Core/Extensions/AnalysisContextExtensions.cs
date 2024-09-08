@@ -214,5 +214,12 @@ internal static class AnalysisContextExtensions
     /// Gets the root node in the analysis span for the given <paramref name="context"/>.
     /// </summary>
     public static SyntaxNode GetAnalysisRoot(this CodeBlockAnalysisContext context, bool findInTrivia, bool getInnermostNodeForTie = false)
-        => context.CodeBlock.FindNode(context.FilterSpan, findInTrivia, getInnermostNodeForTie);
+    {
+        if (context.FilterSpan.HasValue && !context.CodeBlock.FullSpan.Contains(context.FilterSpan.Value))
+        {
+            return context.CodeBlock;
+        }
+
+        return context.CodeBlock.FindNode(context.FilterSpan, findInTrivia, getInnermostNodeForTie);
+    }
 }
