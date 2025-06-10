@@ -25,9 +25,10 @@ internal class UndoManagerServiceFactory(InlineRenameService inlineRenameService
 {
     private readonly InlineRenameService _inlineRenameService = inlineRenameService;
     private readonly IGlobalOptionService _globalOptionService = globalOptionService;
+    private InlineRenameUndoManager inlineRenameUndoManager;
 
     public IWorkspaceService CreateService(HostWorkspaceServices workspaceServices)
-        => new InlineRenameUndoManager(_inlineRenameService, _globalOptionService);
+        => inlineRenameUndoManager ??= new InlineRenameUndoManager(_inlineRenameService, _globalOptionService);
 
     internal class InlineRenameUndoManager(InlineRenameService inlineRenameService, IGlobalOptionService globalOptionService) : AbstractInlineRenameUndoManager<InlineRenameUndoManager.BufferUndoState>(inlineRenameService, globalOptionService), IInlineRenameUndoManager
     {
