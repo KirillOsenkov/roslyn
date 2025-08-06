@@ -19,13 +19,9 @@
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.EditorFeatures" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Wpf" />
-    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.AspNetCore" />
-    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.Razor" />
-    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.Xaml" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.InteractiveHost" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
-    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.ServiceHub" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Scripting" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.VisualBasic" />
@@ -38,11 +34,6 @@
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Workspaces" />
     <AssemblyName Include="Microsoft.CodeAnalysis.Workspaces.Desktop" />
     <AssemblyName Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.CSharp" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Implementation" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.VisualBasic" />
-    <AssemblyName Include="Microsoft.VisualStudio.LanguageServices.Xaml" />
   </ItemGroup>
 
   <ItemGroup>
