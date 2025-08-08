@@ -135,7 +135,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <StrongNameKeyId>Open</StrongNameKeyId>
+    <!--<StrongNameKeyId>Open</StrongNameKeyId>-->
   </PropertyGroup>
 
   <ItemGroup Condition="$(IsCompilerLayer) != true">
