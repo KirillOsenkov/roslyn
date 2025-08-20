@@ -19,6 +19,7 @@
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.EditorFeatures" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
     <AssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Wpf" />
+    <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.ExternalAccess.AspNetCore" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.Features" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.InteractiveHost" />
     <AssemblyNameNet20 Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
