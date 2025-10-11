@@ -46,7 +46,7 @@ param (
   [switch]$sourceBuild = $false,
   [switch]$oop64bit = $true,
   [switch]$lspEditor = $false,
-  [string]$solution = "Roslyn.sln",
+  [string]$solution = "RoslynNoTests.sln",
 
   # official build settings
   [string]$officialBuildId = "",
