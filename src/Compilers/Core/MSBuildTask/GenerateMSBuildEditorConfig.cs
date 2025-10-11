@@ -121,6 +121,8 @@ namespace Microsoft.CodeAnalysis.BuildTasks
                     {
                         return true;
                     }
+
+                    File.Copy(targetFileName, targetFileName + ".old.txt", overwrite: true);
                 }
                 var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
                 File.WriteAllText(targetFileName, ConfigFileContents, encoding);

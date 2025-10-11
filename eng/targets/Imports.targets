@@ -154,8 +154,7 @@
           Condition="'$(GenerateMicrosoftCodeAnalysisCommitHashAttribute)' == 'true' AND '$(SourceControlInformationFeatureSupported)' == 'true'">
     <ItemGroup>
       <AssemblyAttribute Include="Microsoft.CodeAnalysis.CommitHashAttribute">
-        <_Parameter1 Condition="'$(OfficialBuild)' == 'true'">$(SourceRevisionId)</_Parameter1>
-        <_Parameter1 Condition="'$(OfficialBuild)' != 'true'">&lt;developer build&gt;</_Parameter1>
+        <_Parameter1>520c71b5277fc1f72dbec14da03ca55205d6c8e5</_Parameter1>
       </AssemblyAttribute>
     </ItemGroup>
   </Target>
