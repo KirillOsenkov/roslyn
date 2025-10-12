@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.CodeAnalysis.Editor.Shared.Extensions;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
-using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
+//using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
         private readonly RenameFlyoutViewModel _viewModel;
         private readonly IEditorFormatMap _editorFormatMap;
         private readonly IWpfTextView _textView;
-        private readonly IWpfThemeService? _wpfThemeService;
+        //private readonly IWpfThemeService? _wpfThemeService;
         private readonly IAsyncQuickInfoBroker _asyncQuickInfoBroker;
         private readonly IAsynchronousOperationListener _listener;
         private readonly IThreadingContext _threadingContext;
@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
         public RenameFlyout(
             RenameFlyoutViewModel viewModel,
             IWpfTextView textView,
-            IWpfThemeService? themeService,
+            //IWpfThemeService? themeService,
             IAsyncQuickInfoBroker asyncQuickInfoBroker,
             IEditorFormatMapService editorFormatMapService,
             IThreadingContext threadingContext,
@@ -50,9 +50,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             _textView.ViewportWidthChanged += TextView_ViewPortChanged;
             _listener = listenerProvider.GetListener(FeatureAttribute.InlineRenameFlyout);
             _threadingContext = threadingContext;
-            _wpfThemeService = themeService;
+            //_wpfThemeService = themeService;
 
-            RenameUserInput = _viewModel.SmartRenameViewModel is null ? new RenameUserInputTextBox(_viewModel) : new SmartRenameUserInputComboBox(_viewModel);
+            //RenameUserInput = _viewModel.SmartRenameViewModel is null ? new RenameUserInputTextBox(_viewModel) : new SmartRenameUserInputComboBox(_viewModel);
+            RenameUserInput = new RenameUserInputTextBox(_viewModel);
 
             // On load focus the first tab target
             Loaded += (s, e) =>
@@ -71,6 +72,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             RenameUserInputPresenter.Content = RenameUserInput;
             RenameUserInput.PreviewKeyDown += RenameUserInput_PreviewKeyDown;
 
+#if false
             // If smart rename is available, insert the control after the identifier text box.
             if (viewModel.SmartRenameViewModel is not null)
             {
@@ -78,6 +80,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                 var index = MainPanel.Children.IndexOf(IdentifierAndExpandButtonGrid);
                 MainPanel.Children.Insert(index + 1, smartRenameControl);
             }
+#endif
 
             _editorFormatMap = editorFormatMapService.GetEditorFormatMap("text");
 
@@ -110,9 +113,11 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
         public string CancelRename => EditorFeaturesResources.Cancel;
         public string PreviewChanges => EditorFeaturesResources.Preview_changes1;
         public string SubmitText
-            => _viewModel.SmartRenameViewModel is not null
-            ? _viewModel.SmartRenameViewModel.SubmitTextOverride
-            : EditorFeaturesWpfResources.Enter_to_rename_shift_enter_to_preview;
+            => 
+            //_viewModel.SmartRenameViewModel is not null
+            //? _viewModel.SmartRenameViewModel.SubmitTextOverride
+            //: 
+            EditorFeaturesWpfResources.Enter_to_rename_shift_enter_to_preview;
 #pragma warning restore CA1822 // Mark members as static
 
         private void TextView_ViewPortChanged(object sender, EventArgs e)
@@ -208,11 +213,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                     if (Keyboard.Modifiers == ModifierKeys.Control)
                     {
                         // If smart rename is available, trigger or toggle it.
+#if false
                         if (_viewModel.SmartRenameViewModel is not null)
                         {
                             _viewModel.SmartRenameViewModel.ToggleOrTriggerSuggestions();
                             e.Handled = true;
                         }
+#endif
                     }
                     break;
             }
@@ -264,6 +271,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
 
         private void RenameUserInput_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+#if false
             // When smart rename is available, allow the user choose the suggestions using the up/down keys.
             _threadingContext.ThrowIfNotOnUIThread();
             var smartRenameViewModel = _viewModel.SmartRenameViewModel;
@@ -282,6 +290,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                     }
                 }
             }
+#endif
         }
     }
 }

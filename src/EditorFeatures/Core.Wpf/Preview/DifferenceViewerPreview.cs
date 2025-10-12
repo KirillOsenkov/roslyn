@@ -20,11 +20,11 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
         private const int WM_KEYFIRST = 0x0100;
         private const int WM_KEYLAST = 0x0108;
 
-        private readonly IVsFilterKeys2? _filterKeys;
+        //private readonly IVsFilterKeys2? _filterKeys;
 
         private IWpfDifferenceViewer? _viewer;
         private bool _hasFocus;
-        private NavigationalCommandTarget? _editorCommandTarget;
+        //private NavigationalCommandTarget? _editorCommandTarget;
 
         public DifferenceViewerPreview(IWpfDifferenceViewer viewer, IEditorOperationsFactoryService editorOperationsFactoryService)
         {
@@ -42,10 +42,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
                 _ => throw ExceptionUtilities.UnexpectedValue(_viewer.ViewMode),
             };
 
-            _editorCommandTarget = new NavigationalCommandTarget(host.TextView,
-                    editorOperationsFactoryService.GetEditorOperations(host.TextView));
+            //_editorCommandTarget = new NavigationalCommandTarget(host.TextView,
+            //        editorOperationsFactoryService.GetEditorOperations(host.TextView));
 
-            _filterKeys = Package.GetGlobalService(typeof(SVsFilterKeys)) as IVsFilterKeys2;
+            //_filterKeys = Package.GetGlobalService(typeof(SVsFilterKeys)) as IVsFilterKeys2;
         }
 
         public IWpfDifferenceViewer Viewer
@@ -59,13 +59,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
 
         public void Dispose()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            //ThreadHelper.ThrowIfNotOnUIThread();
 
             GC.SuppressFinalize(this);
 
             if (_viewer != null)
             {
-                ComponentDispatcher.ThreadFilterMessage -= FilterThreadMessage;
+                //ComponentDispatcher.ThreadFilterMessage -= FilterThreadMessage;
                 _viewer.VisualElement.IsKeyboardFocusWithinChanged -= OnDifferenceViewerKeyboardFocusWithinChanged;
 
                 if (!_viewer.IsClosed)
@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
             }
 
             _viewer = null;
-            _editorCommandTarget = null;
+            //_editorCommandTarget = null;
         }
 
         ~DifferenceViewerPreview()
@@ -92,6 +92,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
         private void OnDifferenceViewerKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             _hasFocus = (bool)e.NewValue;
+#if false
             if (_hasFocus)
             {
                 // Hook into WPFs thread message handling so we can handle WM_KEYDOWN messages
@@ -102,8 +103,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
                 // Unhook from WPF's thread message handling.
                 ComponentDispatcher.ThreadFilterMessage -= FilterThreadMessage;
             }
+#endif
         }
 
+#if false
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -223,5 +226,6 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.Preview
 
             return false;
         }
+#endif
     }
 }

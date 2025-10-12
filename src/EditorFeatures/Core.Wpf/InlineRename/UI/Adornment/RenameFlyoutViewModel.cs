@@ -14,15 +14,15 @@ using System.Windows.Interop;
 using Microsoft.CodeAnalysis.Editor.InlineRename;
 using Microsoft.CodeAnalysis.Editor.Shared.Extensions;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
-using Microsoft.CodeAnalysis.EditorFeatures.Lightup;
+//using Microsoft.CodeAnalysis.EditorFeatures.Lightup;
 using Microsoft.CodeAnalysis.InlineRename;
-using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
+//using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
+//using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 using Microsoft.VisualStudio.Text;
 using Roslyn.Utilities;
 
@@ -30,9 +30,9 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
 {
     internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly bool _registerOleComponent;
+        //private readonly bool _registerOleComponent;
         private readonly IGlobalOptionService _globalOptionService;
-        private OleComponent? _oleComponent;
+        //private OleComponent? _oleComponent;
         private bool _disposedValue;
         private bool _isReplacementTextValid = true;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -43,13 +43,14 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             bool registerOleComponent,
             IGlobalOptionService globalOptionService,
             IThreadingContext threadingContext,
-            IAsynchronousOperationListenerProvider listenerProvider,
+            IAsynchronousOperationListenerProvider listenerProvider
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-            Lazy<ISmartRenameSessionFactoryWrapper>? smartRenameSessionFactory)
+            //Lazy<ISmartRenameSessionFactoryWrapper>? smartRenameSessionFactory
+            )
 #pragma warning restore CS0618 
         {
             Session = session;
-            _registerOleComponent = registerOleComponent;
+            //_registerOleComponent = registerOleComponent;
             _globalOptionService = globalOptionService;
             Session.ReplacementTextChanged += OnReplacementTextChanged;
             Session.ReplacementsComputed += OnReplacementsComputed;
@@ -57,6 +58,8 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             Session.CommitStateChange += CommitStateChange;
             StartingSelection = selectionSpan;
             InitialTrackingSpan = session.TriggerSpan.CreateTrackingSpan(SpanTrackingMode.EdgeInclusive);
+
+#if false
             var smartRenameSession = smartRenameSessionFactory?.Value.CreateSmartRenameSession(Session.TriggerSpan);
             if (smartRenameSession is not null)
             {
@@ -64,12 +67,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             }
 
             RegisterOleComponent();
+#endif
         }
 
         private void CommitStateChange(object sender, EventArgs args)
             => Visibility = this.Session.IsCommitInProgress ? Visibility.Collapsed : Visibility.Visible;
 
-        public SmartRenameViewModel? SmartRenameViewModel { get; }
+        //public SmartRenameViewModel? SmartRenameViewModel { get; }
 
         public string IdentifierText
         {
@@ -228,14 +232,14 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                 return false;
             }
 
-            SmartRenameViewModel?.Commit(IdentifierText);
+            //SmartRenameViewModel?.Commit(IdentifierText);
             Session.InitiateCommit();
             return true;
         }
 
         public void Cancel()
         {
-            SmartRenameViewModel?.Cancel();
+            //SmartRenameViewModel?.Cancel();
             Session.Cancel();
         }
 
@@ -246,6 +250,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             GC.SuppressFinalize(this);
         }
 
+#if false
         /// <summary>
         /// Shell routes commands based on focused tool window. Since we're outside of a tool window,
         /// Editor can end up intercepting commands and TYPECHARs sent to us, even when we're focused,
@@ -315,6 +320,8 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                 };
         }
 
+#endif
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
@@ -325,12 +332,14 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                     Session.ReplacementsComputed -= OnReplacementsComputed;
                     Session.CommitStateChange -= CommitStateChange;
 
+#if false
                     if (SmartRenameViewModel is not null)
                     {
                         SmartRenameViewModel.Dispose();
                     }
 
                     UnregisterOleComponent();
+#endif
                 }
 
                 _disposedValue = true;

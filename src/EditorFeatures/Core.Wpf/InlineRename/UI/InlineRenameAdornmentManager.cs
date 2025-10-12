@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Editor.InlineRename;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
-using Microsoft.CodeAnalysis.EditorFeatures.Lightup;
+//using Microsoft.CodeAnalysis.EditorFeatures.Lightup;
 using Microsoft.CodeAnalysis.Internal.Log;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
     {
         private readonly IWpfTextView _textView;
         private readonly IGlobalOptionService _globalOptionService;
-        private readonly IWpfThemeService? _themeService;
+        //private readonly IWpfThemeService? _themeService;
         private readonly IAsyncQuickInfoBroker _asyncQuickInfoBroker;
         private readonly IAsynchronousOperationListenerProvider _listenerProvider;
         private readonly InlineRenameService _renameService;
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
         private readonly IInlineRenameColorUpdater? _dashboardColorUpdater;
         private readonly IThreadingContext _threadingContext;
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-        private readonly Lazy<ISmartRenameSessionFactoryWrapper>? _smartRenameSessionFactory;
+        //private readonly Lazy<ISmartRenameSessionFactoryWrapper>? _smartRenameSessionFactory;
 #pragma warning restore CS0618
 
         private readonly IAdornmentLayer _adornmentLayer;
@@ -46,12 +46,13 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             IInlineRenameColorUpdater? dashboardColorUpdater,
             IWpfTextView textView,
             IGlobalOptionService globalOptionService,
-            IWpfThemeService? themeService,
+            //IWpfThemeService? themeService,
             IAsyncQuickInfoBroker asyncQuickInfoBroker,
             IAsynchronousOperationListenerProvider listenerProvider,
-            IThreadingContext threadingContext,
+            IThreadingContext threadingContext
 #pragma warning disable CS0618  // Editor team use Obsolete attribute to mark potential changing API
-            Lazy<ISmartRenameSessionFactoryWrapper>? smartRenameSessionFactory)
+            //Lazy<ISmartRenameSessionFactoryWrapper>? smartRenameSessionFactory
+            )
 #pragma warning restore CS0618
         {
             _renameService = renameService;
@@ -59,12 +60,12 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
             _dashboardColorUpdater = dashboardColorUpdater;
             _textView = textView;
             _globalOptionService = globalOptionService;
-            _themeService = themeService;
+            //_themeService = themeService;
             _asyncQuickInfoBroker = asyncQuickInfoBroker;
             _listenerProvider = listenerProvider;
             _adornmentLayer = textView.GetAdornmentLayer(InlineRenameAdornmentProvider.AdornmentLayerName);
             _threadingContext = threadingContext;
-            _smartRenameSessionFactory = smartRenameSessionFactory;
+            //_smartRenameSessionFactory = smartRenameSessionFactory;
 
             _renameService.ActiveSessionChanged += OnActiveSessionChanged;
             _textView.Closed += OnTextViewClosed;
@@ -100,7 +101,7 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                     return;
                 }
 
-                _themeService?.ApplyThemeToElement(adornment);
+                //_themeService?.ApplyThemeToElement(adornment);
 
                 _adornmentLayer.AddAdornment(
                     AdornmentPositioningBehavior.ViewportRelative,
@@ -151,10 +152,9 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename
                             registerOleComponent: true,
                             _globalOptionService,
                             _threadingContext,
-                            _listenerProvider,
-                            _smartRenameSessionFactory)),
+                            _listenerProvider)),
                     _textView,
-                    _themeService,
+                    //_themeService,
                     _asyncQuickInfoBroker,
                     _editorFormatMapService,
                     _threadingContext,

@@ -30,8 +30,8 @@
     </UserControl.Resources>
 
     <Border
-        Background="{DynamicResource {x:Static vsui:EnvironmentColors.ToolWindowBackgroundBrushKey}}"
-        BorderBrush="{DynamicResource {x:Static vsui:EnvironmentColors.ToolWindowBorderBrushKey}}"
+        Background="{DynamicResource ToolWindowBackground}"
+        BorderBrush="{DynamicResource ToolWindowBorderBrushKey}"
         BorderThickness="1"
         x:Name="Outline"
         platformimaging:ImageThemingUtilities.ImageBackgroundColor="{Binding Path=Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}">

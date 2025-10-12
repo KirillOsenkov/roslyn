@@ -100,6 +100,7 @@ namespace Microsoft.VisualStudio.Shell
             });
         }
 
+#if false
         /// <summary>
         /// Gets a service interface from a service provider asynchronously.
         /// </summary>
@@ -182,5 +183,6 @@ namespace Microsoft.VisualStudio.Shell
 
             return @interface;
         }
+#endif
     }
 }
