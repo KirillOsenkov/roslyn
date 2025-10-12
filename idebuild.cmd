@@ -13,4 +13,4 @@ if %errorlevel% NEQ 0 (
 	exit /b %errorlevel%
 )
 
-call nuget pack microsoft.ide.internal.roslyn.nuspec -Version 1.0.21
+call nuget pack microsoft.ide.internal.roslyn.nuspec -Version 1.0.23

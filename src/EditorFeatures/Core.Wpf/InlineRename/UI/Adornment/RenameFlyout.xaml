@@ -30,7 +30,7 @@
     </UserControl.Resources>
 
     <Border
-        Background="{DynamicResource ToolWindowBackground}"
+        Background="{DynamicResource ToolWindowSolidBackground}"
         BorderBrush="{DynamicResource ToolWindowBorderBrushKey}"
         BorderThickness="1"
         x:Name="Outline"
