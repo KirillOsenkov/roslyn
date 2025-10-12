@@ -73,6 +73,7 @@
     <Compile Remove="QuickInfo\OnTheFly*.cs" />
     <Compile Remove="InlineRename\UI\SmartRename\*.cs" />
     <Compile Remove="Lightup\*.cs" />
+    <Compile Remove="ExternalAccess\**\*.cs" />
     <Page Remove="InlineRename\UI\SmartRename\*.xaml" />
     <Page Remove="QuickInfo\OnTheFlyDocsView.xaml" />
   </ItemGroup>

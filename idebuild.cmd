@@ -1,3 +1,5 @@
+slnfilter Roslyn.sln SolutionFilter.txt RoslynNoTests.sln
+
 call build -restore -binaryLog -configuration Release /p:OfficialBuild=true /p:DebugType=embedded /p:VisualStudioDropName=Products/drop /p:RepositoryName=VSRepo /p:UsingToolVisualStudioIbcTraining=false
 
 if %errorlevel% NEQ 0 (

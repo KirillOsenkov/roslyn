@@ -18,6 +18,10 @@
 !Microsoft.CodeAnalysis.ExternalAccess.Apex
 !Microsoft.CodeAnalysis.ExternalAccess.FSharp
 !Microsoft.CodeAnalysis.ExternalAccess.EditorConfigGenerator
+!Microsoft.CodeAnalysis.ExternalAccess.Razor
+!Microsoft.CodeAnalysis.Remote.ServiceHub
+!Microsoft.CodeAnalysis.Remote.ServiceHub.CoreComponents.arm64.csproj
+!Microsoft.CodeAnalysis.Remote.ServiceHub.CoreComponents.x64.csproj
 !Microsoft.CodeAnalysis.ResultProvider.Utilities
 !Microsoft.CodeAnalysis.TestSourceGenerator
 !Microsoft.CodeAnalysis.XunitHook
