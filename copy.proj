@@ -1,0 +1,72 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+    <RoslynBinariesBase>$(MSBuildThisFileDirectory)artifacts\bin</RoslynBinariesBase>
+    <NugetOutputDirectory>$(MSBuildThisFileDirectory)artifacts\nuget</NugetOutputDirectory>
+    <Net472OutputDirectory>$(NugetOutputDirectory)\lib\net472</Net472OutputDirectory>
+    <Net10OutputDirectory>$(NugetOutputDirectory)\lib\net10.0</Net10OutputDirectory>
+    <PreviousRoslynPackagePath>$(USERPROFILE)\.nuget\packages\microsoft.ide.internal.roslyn\1.0.23\microsoft.ide.internal.roslyn.1.0.23.nupkg</PreviousRoslynPackagePath>
+    <PreviousRoslynPackageDirectory>$(MSBuildThisFileDirectory)artifacts\previous-roslyn-package</PreviousRoslynPackageDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CodeStyle.Fixes" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.ExternalAccess.AspNetCore" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.InteractiveHost" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle.Fixes" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Workspaces" />
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures" />
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures" />
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.EditorFeatures" />
+    <WorkspaceDesktopAssemblyName Include="Microsoft.CodeAnalysis.Workspaces.Desktop" />
+    <WorkspaceDesktopAssemblyName Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis\$(Configuration)\net10.0\Microsoft.CodeAnalysis.dll" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.CSharp\$(Configuration)\net10.0\Microsoft.CodeAnalysis.CSharp.dll" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.VisualBasic\$(Configuration)\net10.0\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <SourceFilesNet10 Include="@(NetStandardOnlyAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(NetStandardOnlyAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).xml')" />
+    <SourceFilesNet10 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).xml')" />
+    <SourceFilesNet10 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0-windows\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0-windows\%(Identity).xml')" />
+    <SourceFilesNet10 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).xml')" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures\Release\net472\Microsoft.CodeAnalysis.Elfie.dll" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\win-x86\InteractiveHost32.exe" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\InteractiveHost32\Release\net472\win-x86\InteractiveHost32.exe.config" />
+    <SourceFilesNet10 Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\x64\Desktop\CSharpInteractive.rsp" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win-x64\InteractiveHost64.exe" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\InteractiveHost64\Release\net472\win-x64\InteractiveHost64.exe.config" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <RemoveDir Directories="$(NugetOutputDirectory);$(PreviousRoslynPackageDirectory)" />
+    <MakeDir Directories="$(Net472OutputDirectory);$(Net10OutputDirectory)" />
+    <Unzip SourceFiles="$(PreviousRoslynPackagePath)" DestinationFolder="$(PreviousRoslynPackageDirectory)" />
+    <ItemGroup>
+      <SourceFilesNet472 Include="$(PreviousRoslynPackageDirectory)\*.dll;$(PreviousRoslynPackageDirectory)\Microsoft.CodeAnalysis*.xml;$(PreviousRoslynPackageDirectory)\*.exe;$(PreviousRoslynPackageDirectory)\*.config;$(PreviousRoslynPackageDirectory)\*.rsp" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SourceFilesNet472)" DestinationFolder="$(Net472OutputDirectory)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SourceFilesNet10)" DestinationFolder="$(Net10OutputDirectory)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

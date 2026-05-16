@@ -2,20 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace Microsoft.CodeAnalysis.Utilities;
 
-internal sealed class BrushToColorConverter : ValueConverter<Brush, Color>
+internal sealed class BrushToColorConverter : IValueConverter
 {
-    protected override Color Convert(Brush brush, object parameter, CultureInfo culture)
-        => brush switch
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        => value switch
         {
             SolidColorBrush solidColorBrush => solidColorBrush.Color,
             GradientBrush gradientBrush => gradientBrush.GradientStops.FirstOrDefault()?.Color ?? Colors.Transparent,
             _ => Colors.Transparent
         };
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => throw new NotSupportedException();
 }

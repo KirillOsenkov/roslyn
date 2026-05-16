@@ -4,8 +4,9 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.CodeAnalysis</RootNamespace>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
     <UseWpf>true</UseWpf>
+    <UseWindowsForms Condition="'$(TargetFramework)' != 'net472'">true</UseWindowsForms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);EDITOR_FEATURES</DefineConstants>
 
@@ -33,8 +34,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Language" />
     <PackageReference Include="Microsoft.VisualStudio.Language.NavigateTo.Interfaces" />
     <PackageReference Include="Microsoft.VisualStudio.Language.StandardClassification" />
-    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client.Implementation" PrivateAssets="all" />
+    <!--<PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client" PrivateAssets="all" />-->
+    <!--<PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client.Implementation" PrivateAssets="all" />-->
     <PackageReference Include="Microsoft.VisualStudio.Text.UI.Wpf" />
     <!-- Access to MS.VS.Text.Internal so we can access to prorotype apis (like SpeculativeEditProvider) -->
     <PackageReference Include="Microsoft.VisualStudio.Text.Internal" />
@@ -112,5 +113,25 @@
   <ItemGroup>
     <PublicAPI Include="PublicAPI.Shipped.txt" />
     <PublicAPI Include="PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="AsyncCompletion\LanguageServerSnippetExpanderAdapter.cs" />
+    <Compile Remove="IWpfThemeService.cs" />
+    <Compile Remove="LanguageServer\*.cs" />
+    <Compile Remove="ExternalAccess\VSTypeScript\VSTypeScriptInProcLanguageClient*.cs" />
+    <Compile Remove="Preview\DifferenceViewerPreview.NavigationalCommandTarget.cs" />
+    <Compile Remove="QuickInfo\OnTheFly*.cs" />
+    <Compile Remove="InlineRename\UI\SmartRename\*.cs" />
+    <!-- VS18-only Editor APIs (Microsoft.VisualStudio.Text.Internal.Proposals, ISpeculativeEditSession, ProposalAdjusterProviderBase). -->
+    <Compile Remove="SpeculativeEdits\*.cs" />
+    <Compile Remove="Copilot\RoslynProposalAdjusterProvider.cs" />
+    <!-- VS18 Debugger.Contracts.HotReload (IManagedHotReloadLanguageService3, ProjectInstanceId, RunningProjectInfo).
+         Helix doesn't use Roslyn's EnC/HotReload integration. -->
+    <Compile Remove="EditAndContinue\EditAndContinueLanguageService.cs" />
+    <Compile Remove="EditAndContinue\EditAndContinueLanguageServiceBridge.cs" />
+    <Compile Remove="EditAndContinue\Contracts\ContractWrappers.cs" />
+    <Compile Remove="EditAndContinue\Contracts\ManagedHotReloadServiceBridge.cs" />
+    <Page Remove="InlineRename\UI\SmartRename\*.xaml" />
+    <Page Remove="QuickInfo\OnTheFlyDocsView.xaml" />
   </ItemGroup>
 </Project>

@@ -22,8 +22,10 @@ namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename;
 [method: Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
 internal sealed class UndoManagerServiceFactory(InlineRenameService inlineRenameService) : IWorkspaceServiceFactory
 {
+    private InlineRenameUndoManager _inlineRenameUndoManager;
+
     public IWorkspaceService CreateService(HostWorkspaceServices workspaceServices)
-        => new InlineRenameUndoManager(inlineRenameService);
+        => _inlineRenameUndoManager ??= new InlineRenameUndoManager(inlineRenameService);
 
     internal sealed class InlineRenameUndoManager(InlineRenameService inlineRenameService)
         : AbstractInlineRenameUndoManager<InlineRenameUndoManager.BufferUndoState>(inlineRenameService), IInlineRenameUndoManager

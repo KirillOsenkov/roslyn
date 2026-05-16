@@ -5,7 +5,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace></RootNamespace>
     <UseWpf>true</UseWpf>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
     <!-- NuGet -->
     <IsPackable>true</IsPackable>
     <PackageDescription>

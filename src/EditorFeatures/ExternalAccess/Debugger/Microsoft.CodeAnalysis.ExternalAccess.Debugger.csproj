@@ -29,6 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- VS18 Debugger.Contracts.HotReload; depends on the bridge classes we excluded in EditorFeatures.csproj. -->
+    <Compile Remove="GlassTestsHotReloadService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Core\Microsoft.CodeAnalysis.EditorFeatures.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.CodeAnalysis.Editor.CSharp</RootNamespace>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
     <UseWpf>true</UseWpf>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- NuGet -->

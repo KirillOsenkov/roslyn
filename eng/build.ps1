@@ -47,7 +47,7 @@ param (
   [switch]$fromVMR = $false,
   [switch]$oop64bit = $true,
   [switch]$lspEditor = $false,
-  [string]$solution = "Roslyn.slnx",
+  [string]$solution = "RoslynNoTests.slnx",
 
   # official build settings
   [string]$officialBuildId = "",
