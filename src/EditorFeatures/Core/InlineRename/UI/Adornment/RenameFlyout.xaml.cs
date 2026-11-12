@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.CodeAnalysis.Editor.Shared.Extensions;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
-using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
+//using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
@@ -46,7 +46,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
         _listener = listenerProvider.GetListener(FeatureAttribute.InlineRenameFlyout);
         _threadingContext = threadingContext;
 
-        RenameUserInput = _viewModel.SmartRenameViewModel is null ? new RenameUserInputTextBox(_viewModel) : new SmartRenameUserInputComboBox(_viewModel);
+        RenameUserInput = new RenameUserInputTextBox(_viewModel);
 
         if (RenameUserInput is Control renameControl)
         {
@@ -73,6 +73,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
         RenameUserInputPresenter.Content = RenameUserInput;
         RenameUserInput.PreviewKeyDown += RenameUserInput_PreviewKeyDown;
 
+#if false
         // If smart rename is available, insert the control after the identifier text box.
         if (viewModel.SmartRenameViewModel is not null)
         {
@@ -80,6 +81,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
             var index = MainPanel.Children.IndexOf(IdentifierAndExpandButtonGrid);
             MainPanel.Children.Insert(index + 1, smartRenameControl);
         }
+#endif
 
         // Dismiss any current tooltips. Note that this does not disable tooltips
         // from showing up again, so if a user has the mouse unmoved another
@@ -110,9 +112,11 @@ internal partial class RenameFlyout : InlineRenameAdornment
     public string CancelRename => EditorFeaturesResources.Cancel;
     public string PreviewChanges => EditorFeaturesResources.Preview_changes1;
     public string SubmitText
-        => _viewModel.SmartRenameViewModel is not null
-        ? _viewModel.SmartRenameViewModel.SubmitTextOverride
-        : EditorFeaturesWpfResources.Enter_to_rename_shift_enter_to_preview;
+        =>
+        //_viewModel.SmartRenameViewModel is not null
+        //? _viewModel.SmartRenameViewModel.SubmitTextOverride
+        //: 
+        EditorFeaturesWpfResources.Enter_to_rename_shift_enter_to_preview;
 #pragma warning restore CA1822 // Mark members as static
 
     private void TextView_ViewPortChanged(object sender, EventArgs e)
@@ -190,6 +194,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
                 break;
 
             case Key.Space:
+#if false
                 if (Keyboard.Modifiers == ModifierKeys.Control)
                 {
                     // If smart rename is available, trigger or toggle it.
@@ -199,6 +204,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
                         e.Handled = true;
                     }
                 }
+#endif
 
                 break;
         }
@@ -241,6 +247,7 @@ internal partial class RenameFlyout : InlineRenameAdornment
 
     private void RenameUserInput_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+#if false
         // When smart rename is available, allow the user choose the suggestions using the up/down keys.
         _threadingContext.ThrowIfNotOnUIThread();
         var smartRenameViewModel = _viewModel.SmartRenameViewModel;
@@ -259,5 +266,6 @@ internal partial class RenameFlyout : InlineRenameAdornment
                 }
             }
         }
+#endif
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Editor.SmartRename;
+//using Microsoft.VisualStudio.Text.Editor.SmartRename;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename;
@@ -27,14 +27,14 @@ internal sealed class InlineRenameAdornmentProvider : IWpfTextViewConnectionList
 {
     private readonly InlineRenameService _renameService;
     private readonly IInlineRenameColorUpdater? _dashboardColorUpdater;
-    private readonly IWpfThemeService? _themeingService;
+    //private readonly IWpfThemeService? _themeingService;
     private readonly IGlobalOptionService _globalOptionService;
     private readonly IAsyncQuickInfoBroker _asyncQuickInfoBroker;
     private readonly IAsynchronousOperationListenerProvider _listenerProvider;
     private readonly IThreadingContext _threadingContext;
 
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-    private readonly Lazy<ISmartRenameSessionFactory>? _smartRenameSessionFactory;
+    //private readonly Lazy<ISmartRenameSessionFactory>? _smartRenameSessionFactory;
 #pragma warning restore CS0618
 
     public const string AdornmentLayerName = "RoslynRenameDashboard";
@@ -55,22 +55,23 @@ internal sealed class InlineRenameAdornmentProvider : IWpfTextViewConnectionList
     public InlineRenameAdornmentProvider(
         InlineRenameService renameService,
         [Import(AllowDefault = true)] IInlineRenameColorUpdater? dashboardColorUpdater,
-        [Import(AllowDefault = true)] IWpfThemeService? themeingService,
+        //[Import(AllowDefault = true)] IWpfThemeService? themeingService,
         IGlobalOptionService globalOptionService,
         IAsyncQuickInfoBroker asyncQuickInfoBroker,
         IAsynchronousOperationListenerProvider listenerProvider,
-        IThreadingContext threadingContext,
+        IThreadingContext threadingContext
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-        [Import(AllowDefault = true)] Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory)
+        //, [Import(AllowDefault = true)] Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory
+        )
 #pragma warning restore CS0618
     {
         _renameService = renameService;
         _dashboardColorUpdater = dashboardColorUpdater;
-        _themeingService = themeingService;
+        //_themeingService = themeingService;
         _globalOptionService = globalOptionService;
         _asyncQuickInfoBroker = asyncQuickInfoBroker;
         _listenerProvider = listenerProvider;
-        _smartRenameSessionFactory = smartRenameSessionFactory;
+        //_smartRenameSessionFactory = smartRenameSessionFactory;
         _threadingContext = threadingContext;
     }
 
@@ -78,7 +79,7 @@ internal sealed class InlineRenameAdornmentProvider : IWpfTextViewConnectionList
     {
         // Create it for the view if we don't already have one
         textView.GetOrCreateAutoClosingProperty(v => new InlineRenameAdornmentManager(
-            _renameService, _dashboardColorUpdater, v, _globalOptionService, _themeingService, _asyncQuickInfoBroker, _listenerProvider, _threadingContext, _smartRenameSessionFactory));
+            _renameService, _dashboardColorUpdater, v, _globalOptionService, _asyncQuickInfoBroker, _listenerProvider, _threadingContext));
     }
 
     public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)

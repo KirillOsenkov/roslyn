@@ -1,0 +1,110 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--
+    Lays out artifacts\nuget for microsoft.ide.internal.roslyn.nuspec:
+
+      lib\net472   the three compiler assemblies copied from the Visual Studio install
+                   (Microsoft full-signed, so Ngen accepts them, and without IVT to Helix),
+                   everything else from this fork's build (netstandard2.0 or net472 outputs).
+      lib\net10.0  everything from this fork's build (net10.0, net10.0-windows or
+                   netstandard2.0 outputs).
+
+    The Visual Studio install must ship the same Roslyn commit this branch is based on.
+  -->
+
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+    <RoslynBinariesBase>$(MSBuildThisFileDirectory)artifacts\bin</RoslynBinariesBase>
+    <NugetOutputDirectory>$(MSBuildThisFileDirectory)artifacts\nuget</NugetOutputDirectory>
+    <Net472OutputDirectory>$(NugetOutputDirectory)\lib\net472</Net472OutputDirectory>
+    <Net10OutputDirectory>$(NugetOutputDirectory)\lib\net10.0</Net10OutputDirectory>
+    <VSInstallRoot>$(ProgramW6432)\Microsoft Visual Studio\18</VSInstallRoot>
+    <VSInstallDirectory Condition="'$(VSInstallDirectory)' == '' and Exists('$(VSInstallRoot)\Enterprise')">$(VSInstallRoot)\Enterprise</VSInstallDirectory>
+    <VSInstallDirectory Condition="'$(VSInstallDirectory)' == '' and Exists('$(VSInstallRoot)\Professional')">$(VSInstallRoot)\Professional</VSInstallDirectory>
+    <VSInstallDirectory Condition="'$(VSInstallDirectory)' == '' and Exists('$(VSInstallRoot)\Community')">$(VSInstallRoot)\Community</VSInstallDirectory>
+    <VSRoslynDirectory>$(VSInstallDirectory)\Common7\IDE\CommonExtensions\Microsoft\VBCSharp\LanguageServices</VSRoslynDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- netstandard2.0-only projects: the same output goes into both folders. -->
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CodeStyle.Fixes" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.CSharp.CodeStyle.Fixes" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.ExternalAccess.AspNetCore" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle" />
+    <NetStandardOnlyAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.CodeStyle.Fixes" />
+
+    <!-- netstandard2.0 output for lib\net472, net10.0 output for lib\net10.0. -->
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures.Text" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Features.ExternalAccess" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.LanguageServer.Protocol" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Remote.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Features" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Scripting" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" />
+    <MultiTargetAssemblyName Include="Microsoft.CodeAnalysis.Workspaces" />
+
+    <!-- net472 output for lib\net472, net10.0-windows output for lib\net10.0. -->
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.CSharp.EditorFeatures" />
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.EditorFeatures" />
+    <DesktopAssemblyName Include="Microsoft.CodeAnalysis.VisualBasic.EditorFeatures" />
+
+    <!-- net472 output for lib\net472, net10.0 output for lib\net10.0. -->
+    <WorkspaceDesktopAssemblyName Include="Microsoft.CodeAnalysis.InteractiveHost" />
+    <WorkspaceDesktopAssemblyName Include="Microsoft.CodeAnalysis.Workspaces.Desktop" />
+    <WorkspaceDesktopAssemblyName Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Shared by both folders. -->
+    <SourceFilesCommon Include="@(NetStandardOnlyAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).dll')" />
+    <SourceFilesCommon Include="@(NetStandardOnlyAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).xml')" />
+    <SourceFilesCommon Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.EditorFeatures\$(Configuration)\net472\Microsoft.CodeAnalysis.Elfie.dll" />
+    <SourceFilesCommon Include="$(RoslynBinariesBase)\InteractiveHost32\$(Configuration)\net472\win-x86\InteractiveHost32.exe" />
+    <SourceFilesCommon Include="$(RoslynBinariesBase)\InteractiveHost32\$(Configuration)\net472\win-x86\InteractiveHost32.exe.config" />
+    <SourceFilesCommon Include="$(MSBuildThisFileDirectory)src\Interactive\HostProcess\x64\Desktop\CSharpInteractive.rsp" />
+    <SourceFilesCommon Include="$(RoslynBinariesBase)\InteractiveHost64\$(Configuration)\net472\win-x64\InteractiveHost64.exe" />
+    <SourceFilesCommon Include="$(RoslynBinariesBase)\InteractiveHost64\$(Configuration)\net472\win-x64\InteractiveHost64.exe.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceFilesNet472 Include="$(VSRoslynDirectory)\Microsoft.CodeAnalysis.dll" />
+    <SourceFilesNet472 Include="$(VSRoslynDirectory)\Microsoft.CodeAnalysis.CSharp.dll" />
+    <SourceFilesNet472 Include="$(VSRoslynDirectory)\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <SourceFilesNet472 Include="@(SourceFilesCommon)" />
+    <SourceFilesNet472 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).dll')" />
+    <SourceFilesNet472 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\netstandard2.0\%(Identity).xml')" />
+    <SourceFilesNet472 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).dll')" />
+    <SourceFilesNet472 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
+    <SourceFilesNet472 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).dll')" />
+    <SourceFilesNet472 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net472\%(Identity).xml')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis\$(Configuration)\net10.0\Microsoft.CodeAnalysis.dll" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.CSharp\$(Configuration)\net10.0\Microsoft.CodeAnalysis.CSharp.dll" />
+    <SourceFilesNet10 Include="$(RoslynBinariesBase)\Microsoft.CodeAnalysis.VisualBasic\$(Configuration)\net10.0\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <SourceFilesNet10 Include="@(SourceFilesCommon)" />
+    <SourceFilesNet10 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(MultiTargetAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).xml')" />
+    <SourceFilesNet10 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0-windows\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(DesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0-windows\%(Identity).xml')" />
+    <SourceFilesNet10 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).dll')" />
+    <SourceFilesNet10 Include="@(WorkspaceDesktopAssemblyName->'$(RoslynBinariesBase)\%(Identity)\$(Configuration)\net10.0\%(Identity).xml')" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Error Condition="!Exists('$(VSRoslynDirectory)\Microsoft.CodeAnalysis.dll')" Text="Microsoft.CodeAnalysis.dll was not found in '$(VSRoslynDirectory)'. Pass /p:VSInstallDirectory=&lt;Visual Studio install directory&gt;." />
+    <RemoveDir Directories="$(NugetOutputDirectory)" />
+    <MakeDir Directories="$(Net472OutputDirectory);$(Net10OutputDirectory)" />
+    <Copy SourceFiles="@(SourceFilesNet472)" DestinationFolder="$(Net472OutputDirectory)" />
+    <Copy SourceFiles="@(SourceFilesNet10)" DestinationFolder="$(Net10OutputDirectory)" />
+  </Target>
+
+</Project>

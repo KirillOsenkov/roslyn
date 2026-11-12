@@ -139,7 +139,8 @@ internal sealed class BlockCommentEditingCommandHandler : ICommandHandler<Return
 
         string GetCommentIndentation()
         {
-            using var _ = PooledStringBuilder.GetInstance(out var builder);
+            // Helix: Microsoft.VisualStudio.Utilities 17.x has no PooledStringBuilder.GetInstance(out StringBuilder).
+            var builder = new System.Text.StringBuilder();
 
             var commentStart = blockComment.FullSpan.Start;
             var commentLine = textSnapshot.GetLineFromPosition(commentStart);

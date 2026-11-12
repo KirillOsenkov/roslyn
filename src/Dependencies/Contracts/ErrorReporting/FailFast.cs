@@ -51,9 +51,20 @@ namespace Microsoft.CodeAnalysis.ErrorReporting
         internal static void Fail(string message)
         {
             DumpStackTrace(message: message);
-            Environment.FailFast(message);
-            throw ExceptionUtilities.Unreachable(); // to satisfy [DoesNotReturn]
+
+            // Helix: never bring down the host process. Throw and swallow an exception so that the
+            // host's first-chance exception handler logs the message with a stack trace, then return.
+            // This replaces the runtime patch of this method that Helix used to apply via reflection.
+            try
+            {
+                throw new InvalidOperationException(message);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+#pragma warning disable CS8763 // A method marked [DoesNotReturn] should not return
         }
+#pragma warning restore CS8763
 
         /// <summary>
         /// Dumps the stack trace of the exception and the handler to the console. This is useful

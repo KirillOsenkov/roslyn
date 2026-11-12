@@ -99,8 +99,25 @@ internal partial class WpfBackgroundWorkIndicatorFactory
         /// </summary>
         public void Dispose()
         {
-            // Editor implementation of Dispose is safe to call on any thread, and can be called multiple times.
-            _backgroundWorkIndicator.Dispose();
+            // VS Editor 17's BackgroundWorkIndicator.Dispose throws InvalidOperationException
+            // ("Must be called from UI thread") when invoked off the UI thread. Editor 18+
+            // relaxed that, but our pinned Editor 17 still requires it. GoToDefinition disposes
+            // on a threadpool continuation, so we need to marshal to the UI thread here.
+            // The async machinery swallows the exception, leaving the progress popup
+            // ("Navigating to definition...") undismissed.
+            var jtf = _factory._threadingContext.JoinableTaskFactory;
+            if (jtf.Context.IsOnMainThread)
+            {
+                _backgroundWorkIndicator.Dispose();
+            }
+            else
+            {
+                jtf.Run(async () =>
+                {
+                    await jtf.SwitchToMainThreadAsync();
+                    _backgroundWorkIndicator.Dispose();
+                });
+            }
             _factory.OnContextDisposed(this);
         }
 

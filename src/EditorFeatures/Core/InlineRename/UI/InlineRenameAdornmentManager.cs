@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Editor.SmartRename;
+//using Microsoft.VisualStudio.Text.Editor.SmartRename;
 
 namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename;
 
@@ -20,14 +20,14 @@ internal sealed class InlineRenameAdornmentManager : IDisposable
 {
     private readonly IWpfTextView _textView;
     private readonly IGlobalOptionService _globalOptionService;
-    private readonly IWpfThemeService? _themeService;
+    //private readonly IWpfThemeService? _themeService;
     private readonly IAsyncQuickInfoBroker _asyncQuickInfoBroker;
     private readonly IAsynchronousOperationListenerProvider _listenerProvider;
     private readonly InlineRenameService _renameService;
     private readonly IInlineRenameColorUpdater? _dashboardColorUpdater;
     private readonly IThreadingContext _threadingContext;
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-    private readonly Lazy<ISmartRenameSessionFactory>? _smartRenameSessionFactory;
+    //private readonly Lazy<ISmartRenameSessionFactory>? _smartRenameSessionFactory;
 #pragma warning restore CS0618
 
     private readonly IAdornmentLayer _adornmentLayer;
@@ -39,24 +39,25 @@ internal sealed class InlineRenameAdornmentManager : IDisposable
         IInlineRenameColorUpdater? dashboardColorUpdater,
         IWpfTextView textView,
         IGlobalOptionService globalOptionService,
-        IWpfThemeService? themeService,
+        //IWpfThemeService? themeService,
         IAsyncQuickInfoBroker asyncQuickInfoBroker,
         IAsynchronousOperationListenerProvider listenerProvider,
-        IThreadingContext threadingContext,
+        IThreadingContext threadingContext
 #pragma warning disable CS0618  // Editor team use Obsolete attribute to mark potential changing API
-        Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory)
+        //Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory
+        )
 #pragma warning restore CS0618
     {
         _renameService = renameService;
         _dashboardColorUpdater = dashboardColorUpdater;
         _textView = textView;
         _globalOptionService = globalOptionService;
-        _themeService = themeService;
+        //_themeService = themeService;
         _asyncQuickInfoBroker = asyncQuickInfoBroker;
         _listenerProvider = listenerProvider;
         _adornmentLayer = textView.GetAdornmentLayer(InlineRenameAdornmentProvider.AdornmentLayerName);
         _threadingContext = threadingContext;
-        _smartRenameSessionFactory = smartRenameSessionFactory;
+        //_smartRenameSessionFactory = smartRenameSessionFactory;
 
         _renameService.ActiveSessionChanged += OnActiveSessionChanged;
         _textView.Closed += OnTextViewClosed;
@@ -92,7 +93,7 @@ internal sealed class InlineRenameAdornmentManager : IDisposable
                 return;
             }
 
-            _themeService?.ApplyThemeToElement(adornment);
+            //_themeService?.ApplyThemeToElement(adornment);
 
             _adornmentLayer.AddAdornment(
                 AdornmentPositioningBehavior.ViewportRelative,
@@ -139,8 +140,7 @@ internal sealed class InlineRenameAdornmentManager : IDisposable
                     registerOleComponent: true,
                     _globalOptionService,
                     _threadingContext,
-                    _listenerProvider,
-                    _smartRenameSessionFactory)),
+                    _listenerProvider)),
             _textView,
             _asyncQuickInfoBroker,
             _threadingContext,

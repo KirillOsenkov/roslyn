@@ -16,25 +16,25 @@ using Microsoft.CodeAnalysis.Editor.Shared.Extensions;
 using Microsoft.CodeAnalysis.Editor.Shared.Utilities;
 using Microsoft.CodeAnalysis.ErrorReporting;
 using Microsoft.CodeAnalysis.InlineRename;
-using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
+//using Microsoft.CodeAnalysis.InlineRename.UI.SmartRename;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
+//using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor.SmartRename;
+//using Microsoft.VisualStudio.Text.Editor.SmartRename;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Editor.Implementation.InlineRename;
 
 internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
 {
-    private readonly bool _registerOleComponent;
+    //private readonly bool _registerOleComponent;
     private readonly IGlobalOptionService _globalOptionService;
     private readonly IAsynchronousOperationListener _asyncListener;
-    private OleComponent? _oleComponent;
+    //private OleComponent? _oleComponent;
     private bool _disposedValue;
     private bool _isReplacementTextValid = true;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -45,13 +45,14 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
         bool registerOleComponent,
         IGlobalOptionService globalOptionService,
         IThreadingContext threadingContext,
-        IAsynchronousOperationListenerProvider listenerProvider,
+        IAsynchronousOperationListenerProvider listenerProvider
 #pragma warning disable CS0618 // Editor team use Obsolete attribute to mark potential changing API
-        Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory)
+        //Lazy<ISmartRenameSessionFactory>? smartRenameSessionFactory
+        )
 #pragma warning restore CS0618 
     {
         Session = session;
-        _registerOleComponent = registerOleComponent;
+        //_registerOleComponent = registerOleComponent;
         _globalOptionService = globalOptionService;
         _asyncListener = listenerProvider.GetListener(FeatureAttribute.Rename);
         Session.ReplacementTextChanged += OnReplacementTextChanged;
@@ -60,6 +61,8 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
         Session.CommitStateChange += CommitStateChange;
         StartingSelection = selectionSpan;
         InitialTrackingSpan = session.TriggerSpan.CreateTrackingSpan(SpanTrackingMode.EdgeInclusive);
+
+#if false
         var smartRenameSession = smartRenameSessionFactory?.Value.CreateSmartRenameSession(Session.TriggerSpan);
         if (smartRenameSession is not null)
         {
@@ -67,12 +70,13 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
         }
 
         RegisterOleComponent();
+#endif
     }
 
     private void CommitStateChange(object sender, EventArgs args)
         => Visibility = this.Session.IsCommitInProgress ? Visibility.Collapsed : Visibility.Visible;
 
-    public SmartRenameViewModel? SmartRenameViewModel { get; }
+    //public SmartRenameViewModel? SmartRenameViewModel { get; }
 
     public string IdentifierText
     {
@@ -234,7 +238,7 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
             return false;
         }
 
-        SmartRenameViewModel?.Commit(IdentifierText);
+        //SmartRenameViewModel?.Commit(IdentifierText);
 
         var token = _asyncListener.BeginAsyncOperation(nameof(Submit));
 
@@ -246,7 +250,7 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
 
     public void Cancel()
     {
-        SmartRenameViewModel?.Cancel();
+        //SmartRenameViewModel?.Cancel();
         Session.Cancel();
     }
 
@@ -257,6 +261,7 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
         GC.SuppressFinalize(this);
     }
 
+#if false
     /// <summary>
     /// Shell routes commands based on focused tool window. Since we're outside of a tool window,
     /// Editor can end up intercepting commands and TYPECHARs sent to us, even when we're focused,
@@ -325,6 +330,7 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
                 _ => false
             };
     }
+#endif
 
     protected virtual void Dispose(bool disposing)
     {
@@ -336,9 +342,11 @@ internal class RenameFlyoutViewModel : INotifyPropertyChanged, IDisposable
                 Session.ReplacementsComputed -= OnReplacementsComputed;
                 Session.CommitStateChange -= CommitStateChange;
 
+#if false
                 SmartRenameViewModel?.Dispose();
 
                 UnregisterOleComponent();
+#endif
             }
 
             _disposedValue = true;

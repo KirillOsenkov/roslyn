@@ -4,7 +4,10 @@
     <_BasicReferenceAssembliesVersion>1.8.8</_BasicReferenceAssembliesVersion>
     <!-- CodeStyleAnalyzerVersion should be updated together with version of SDK in global.json -->
     <CodeStyleAnalyzerVersion>5.9.0</CodeStyleAnalyzerVersion>
-    <VisualStudioEditorPackagesVersion>18.12.46</VisualStudioEditorPackagesVersion>
+    <!-- Pinned to 17.14.249 to match what Helix's Microsoft.Ide.Internal.VS.Editor ships
+         (the editor fork at 17.14.251, assembly version 17.0.0.0), avoiding 18-vs-17 binding
+         mismatches at compile/runtime. Roslyn at this SHA was built against 18.12.46. -->
+    <VisualStudioEditorPackagesVersion>17.14.249</VisualStudioEditorPackagesVersion>
     <ILAsmPackageVersion>9.0.0-rc.2.24462.10</ILAsmPackageVersion>
     <ILDAsmPackageVersion>6.0.0-rtm.21518.12</ILDAsmPackageVersion>
     <MicrosoftILVerificationVersion>7.0.0-alpha.1.22060.1</MicrosoftILVerificationVersion>
@@ -72,7 +75,7 @@
       Visual Studio
     -->
     <PackageVersion Include="Microsoft.Internal.VisualStudio.Interop" Version="18.9.438" />
-    <PackageVersion Include="Microsoft.Internal.VisualStudio.Shell.Framework" Version="18.9.317" />
+    <PackageVersion Include="Microsoft.Internal.VisualStudio.Shell.Framework" Version="17.9.36524" />
     <PackageVersion Include="Microsoft.ServiceHub.Client" Version="4.6.3200" />
     <PackageVersion Include="Microsoft.VisualStudio.CallHierarchy.Package.Definitions" Version="15.8.27812-alpha" />
     <PackageVersion Include="Microsoft.VisualStudio.CodeAnalysis.Sdk.UI" Version="15.8.27812-alpha" />
@@ -114,30 +117,36 @@
     <PackageVersion Include="envdte" Version="18.12.772" />
     <PackageVersion Include="envdte80" Version="18.12.772" />
     <PackageVersion Include="MessagePack" Version="2.5.302" />
-    <PackageVersion Include="Microsoft.ServiceHub.Framework" Version="4.11.156" />
-    <PackageVersion Include="Microsoft.VisualStudio.Composition" Version="18.9.89" />
-    <PackageVersion Include="Microsoft.VisualStudio.Composition.Analyzers" Version="18.9.89" />
+    <!-- ServiceHub.Framework, Composition, Threading, Validation, StreamJsonRpc and the VS shell
+         packages below are set to versions whose whole dependency closure is on nuget.org, which
+         is where Helix restores them from. Upstream at this SHA uses ServiceHub.Framework 4.11.156,
+         Composition 18.9.89, Threading 18.7.131, Validation 18.7.19, StreamJsonRpc 2.26.114 and
+         VS shell 18.12.772. Composition 18.x and Validation 18.x are not on nuget.org, and
+         ServiceHub.Framework 4.11 depends on both, so it stays at the version Helix ships. -->
+    <PackageVersion Include="Microsoft.ServiceHub.Framework" Version="4.8.55" />
+    <PackageVersion Include="Microsoft.VisualStudio.Composition" Version="17.13.41" />
+    <PackageVersion Include="Microsoft.VisualStudio.Composition.Analyzers" Version="17.13.41" />
     <PackageVersion Include="Microsoft.VisualStudio.CoreUtility" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Editor" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Language" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Language.NavigateTo.Interfaces" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Language.StandardClassification" Version="$(VisualStudioEditorPackagesVersion)" />
-    <PackageVersion Include="Microsoft.VisualStudio.ImageCatalog" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Imaging" Version="18.12.772" />
+    <PackageVersion Include="Microsoft.VisualStudio.ImageCatalog" Version="17.13.40008" />
+    <PackageVersion Include="Microsoft.VisualStudio.Imaging" Version="17.13.40008" />
     <PackageVersion Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Interop" Version="18.12.772" />
+    <PackageVersion Include="Microsoft.VisualStudio.Interop" Version="17.13.40008" />
     <PackageVersion Include="Microsoft.VisualStudio.LanguageServer.Client" Version="18.12.48" />
     <PackageVersion Include="Microsoft.VisualStudio.OLE.Interop" Version="18.12.772" />
     <PackageVersion Include="Microsoft.VisualStudio.RemoteControl" Version="16.3.52" />
-    <PackageVersion Include="Microsoft.VisualStudio.RpcContracts" Version="18.12.772" />
+    <PackageVersion Include="Microsoft.VisualStudio.RpcContracts" Version="17.14.20" />
     <PackageVersion Include="Microsoft.VisualStudio.SDK.Analyzers" Version="17.7.175" />
-    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Shell.Framework" Version="18.12.772" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.13.40008" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.Framework" Version="17.13.40008" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.Interop" Version="18.12.772" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="18.12.772" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.Interop.8.0" Version="18.12.772" />
     <PackageVersion Include="Microsoft.VisualStudio.Shell.Interop.9.0" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Shell.Styles" Version="18.12.772" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.Styles" Version="17.13.40008" />
     <PackageVersion Include="Microsoft.VisualStudio.Telemetry" Version="18.3.193" />
     <PackageVersion Include="Microsoft.VisualStudio.Text.Data" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.Text.Logic" Version="$(VisualStudioEditorPackagesVersion)" />
@@ -145,15 +154,15 @@
     <PackageVersion Include="Microsoft.VisualStudio.Text.UI.Wpf" Version="$(VisualStudioEditorPackagesVersion)" />
     <PackageVersion Include="Microsoft.VisualStudio.TextManager.Interop" Version="18.12.772" />
     <PackageVersion Include="Microsoft.VisualStudio.TextManager.Interop.8.0" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="18.7.131" />
-    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.7.131" />
-    <PackageVersion Include="Microsoft.VisualStudio.Utilities" Version="18.12.772" />
-    <PackageVersion Include="Microsoft.VisualStudio.Utilities.Internal" Version="16.3.170" />
-    <PackageVersion Include="Microsoft.VisualStudio.Validation" Version="18.7.19" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="18.7.23" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.7.23" />
+    <PackageVersion Include="Microsoft.VisualStudio.Utilities" Version="17.13.40008" />
+    <PackageVersion Include="Microsoft.VisualStudio.Utilities.Internal" Version="16.3.90" />
+    <PackageVersion Include="Microsoft.VisualStudio.Validation" Version="17.13.22" />
     <PackageVersion Include="Nerdbank.Streams" Version="2.13.16" />
     <PackageVersion Include="Nerdbank.MessagePack" Version="1.2.34" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="StreamJsonRpc" Version="2.26.114" />
+    <PackageVersion Include="StreamJsonRpc" Version="2.26.125" />
     <PackageVersion Include="VSLangProj" Version="18.12.772" />
 
     <!--

@@ -109,8 +109,10 @@ internal sealed partial class EventHookupSessionManager(
             //
             // Also, 'ConfigureAwait(true)' on everything here as we want to stay on the UI thread.
             _suggestionBlocker?.DisposeAsync().ConfigureAwait(true);
-            _suggestionBlocker = await SuggestionServiceBase.Value.DismissAndBlockProposalsAsync(
-                analyzedSession.TextView, ReasonForDismiss.DismissedAfterBufferChange, CancellationToken.None).ConfigureAwait(true);
+            // VS18-only API. The v17 SuggestionServiceBase doesn't expose DismissAndBlockProposalsAsync.
+            //_suggestionBlocker = await SuggestionServiceBase.Value.DismissAndBlockProposalsAsync(
+            //    analyzedSession.TextView, ReasonForDismiss.DismissedAfterBufferChange, CancellationToken.None).ConfigureAwait(true);
+            await Task.CompletedTask;
         }
     }
 
