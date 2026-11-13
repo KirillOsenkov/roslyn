@@ -26,7 +26,13 @@
     <PackageReference Include="System.ComponentModel.Composition" />
     <PackageReference Include="Microsoft.VisualStudio.Composition" />
     <PackageReference Include="Microsoft.VisualStudio.Telemetry" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.ServiceHub.Client" />
+    <PackageReference Include="Microsoft.ServiceHub.Framework" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Out-of-process Roslyn client; Helix runs Roslyn in process and has no IRemoteHostClientProvider. -->
+    <Compile Remove="ServiceHubRemoteHostClient.cs" />
+    <Compile Remove="ExternalAccess\UnitTesting\Api\UnitTestingRemoteHostClient.cs" />
+    <Compile Remove="ExternalAccess\Pythia\Api\PythiaRemoteHostClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <PublicAPI Include="PublicAPI.Shipped.txt" />

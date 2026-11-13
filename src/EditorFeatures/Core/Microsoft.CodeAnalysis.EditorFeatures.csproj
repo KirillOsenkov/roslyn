@@ -30,7 +30,6 @@
     <ProjectReference Include="..\Text\Microsoft.CodeAnalysis.EditorFeatures.Text.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Debugger.Contracts" />
     <PackageReference Include="Microsoft.VisualStudio.ImageCatalog" />
     <PackageReference Include="Microsoft.VisualStudio.InteractiveWindow" />
     <PackageReference Include="Microsoft.VisualStudio.Language" />
@@ -41,10 +40,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Text.UI.Wpf" />
     <!-- Access to MS.VS.Text.Internal so we can access to prorotype apis (like SpeculativeEditProvider) -->
     <PackageReference Include="Microsoft.VisualStudio.Text.Internal" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\Workspaces\Remote\ServiceHub\Services\EditAndContinue\EditAndContinueLogReporter.cs" Link="EditAndContinue\EditAndContinueLogReporter.cs" />
-    <Compile Include="..\..\Workspaces\Remote\ServiceHub\Services\EditAndContinue\HotReloadLoggerProxy.cs" Link="EditAndContinue\HotReloadLoggerProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" Key="$(MoqPublicKey)" LoadsWithinVisualStudio="false" />

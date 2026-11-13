@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.Shared.TestHooks;
 using Microsoft.CodeAnalysis.Text.Shared.Extensions;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Microsoft.VisualStudio.Language.NavigateTo.Interfaces;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 
@@ -114,13 +113,13 @@ internal sealed class NavigateToItemDisplay : INavigateToItemDisplay3
         var document = _searchResult.NavigableItem.Document;
         if (document == null)
         {
-            return (int)__VSPROVISIONALVIEWINGSTATUS.PVS_Disabled;
+            return 0;
         }
 
         var workspace = document.Workspace;
         var previewService = workspace.Services.GetService<INavigateToPreviewService>();
 
-        return (int)previewService.GetProvisionalViewingStatus(document);
+        return previewService.GetProvisionalViewingStatus(document);
     }
 
     public void PreviewItem()
