@@ -110,6 +110,8 @@
     <Compile Remove="ExternalAccess\VSTypeScript\VSTypeScriptInProcLanguageClient*.cs" />
     <Compile Remove="Preview\DifferenceViewerPreview.NavigationalCommandTarget.cs" />
     <Compile Remove="QuickInfo\OnTheFly*.cs" />
+    <!-- Only OnTheFlyDocsView used it; it is the fork's one use of Microsoft.VisualStudio.Utilities (ServiceUnavailableException). -->
+    <Compile Remove="Utilities\RoslynServiceExtensions.cs" />
     <Compile Remove="InlineRename\UI\SmartRename\*.cs" />
     <!-- VS18-only Editor APIs (Microsoft.VisualStudio.Text.Internal.Proposals, ISpeculativeEditSession, ProposalAdjusterProviderBase). -->
     <Compile Remove="SpeculativeEdits\*.cs" />
